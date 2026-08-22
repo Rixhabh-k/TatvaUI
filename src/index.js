@@ -1,0 +1,1 @@
+export {magnetic} from "./animations/magnetic.js"
