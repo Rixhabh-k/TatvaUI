@@ -10,45 +10,60 @@
 
   cursor: pointer;
 
-  /*
-    These are only fallbacks.
-    User's class can override them.
-  */
+  /* User customization */
   width: var(--submit-width, 130px);
   height: var(--submit-height, 40px);
 
   background: transparent;
-  color: var(--submit-text, var(--submit-color));
 
-  border: var(--submit-border-width, 2px) solid
-    var(--submit-border-color, var(--submit-color));
+  color: var(
+    --submit-text,
+    var(--submit-color)
+  );
 
-  border-radius: var(--submit-radius, 40px);
+  border:
+    var(--submit-border-width, 2px)
+    solid
+    var(
+      --submit-border-color,
+      var(--submit-color)
+    );
 
-  font-size: var(--submit-font-size, 12px);
-  font-weight: var(--submit-font-weight, bold);
-  letter-spacing: var(--submit-letter-spacing, 1px);
+  border-radius:
+    var(--submit-radius, 40px);
+
+  font-size:
+    var(--submit-font-size, 12px);
+
+  font-weight:
+    var(--submit-font-weight, bold);
+
+  letter-spacing:
+    var(--submit-letter-spacing, 1px);
 
   transition:
-    width 250ms ease,
-    height 250ms ease,
     background 250ms ease,
     color 250ms ease,
     border-color 250ms ease;
 }
 
 
-/* TEXT */
+/* =========================
+   TEXT
+========================= */
 
 .velmora-submit__text {
   position: relative;
+
   z-index: 2;
 
   transition: opacity 200ms ease;
 }
 
 
-/* SPINNER */
+/* =========================
+   SPINNER
+========================= */
 
 .velmora-submit__spinner {
   position: absolute;
@@ -56,15 +71,20 @@
   top: 50%;
   left: 50%;
 
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
 
-  border: 3px solid var(--submit-loading-color);
-  border-left-color: var(--submit-color);
+  border:
+    3px solid
+    var(--submit-loading-color);
+
+  border-left-color:
+    var(--submit-color);
 
   border-radius: 50%;
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%);
 
   opacity: 0;
 
@@ -72,7 +92,9 @@
 }
 
 
-/* CHECK */
+/* =========================
+   CHECK
+========================= */
 
 .velmora-submit__check {
   position: absolute;
@@ -86,66 +108,125 @@
 
   opacity: 0;
 
-  color: var(--submit-success-text, #fff);
+  color:
+    var(--submit-success-text, #fff);
 
   font-size: 18px;
+
   font-weight: bold;
 
   pointer-events: none;
+
+  transition:
+    opacity 200ms ease,
+    transform 250ms ease;
 }
 
 
-/* HOVER */
+/* =========================
+   HOVER
+========================= */
 
 .velmora-submit--idle:hover {
-  background: var(--submit-hover-bg, var(--submit-color));
-  color: var(--submit-hover-text, #fff);
+  background:
+    var(
+      --submit-hover-bg,
+      var(--submit-color)
+    );
+
+  color:
+    var(
+      --submit-hover-text,
+      #fff
+    );
 }
 
 
-/* LOADING */
+/* =========================
+   LOADING
+========================= */
 
 .velmora-submit--loading {
-  width: 30px;
-  height: 30px;
+  /*
+    IMPORTANT:
+    Don't change width/height here.
 
-  border-width: 2px;
+    The button keeps exactly the same
+    layout dimensions, so nothing around
+    it moves.
+  */
 
-  border-color: var(--submit-loading-color);
-  border-left-color: var(--submit-color);
+  cursor: default;
+
+  /*
+    Fade the original button away.
+    No pill → oval → circle morph.
+  */
 
   background: transparent;
 
-  cursor: default;
-
-  animation: velmora-submit-rotate 2s linear infinite;
+  border-color: transparent;
 }
 
-.velmora-submit--loading .velmora-submit__text {
+
+/* Hide original text */
+
+.velmora-submit--loading
+.velmora-submit__text {
   opacity: 0;
 }
 
-.velmora-submit--loading .velmora-submit__spinner {
+
+/* Show spinner */
+
+.velmora-submit--loading
+.velmora-submit__spinner {
   opacity: 1;
+
+  animation:
+    velmora-submit-rotate
+    800ms
+    linear
+    infinite;
 }
 
 
-/* SUCCESS */
+/* =========================
+   SUCCESS
+========================= */
 
 .velmora-submit--success {
-  background: var(--submit-success-bg, var(--submit-success-color));
-  color: var(--submit-success-text, #fff);
+  background:
+    var(
+      --submit-success-bg,
+      var(--submit-success-color)
+    );
 
-  border-color: var(--submit-success-color);
+  color:
+    var(
+      --submit-success-text,
+      #fff
+    );
+
+  border-color:
+    var(--submit-success-color);
 
   cursor: default;
 }
 
-.velmora-submit--success .velmora-submit__text {
+
+/* Hide text */
+
+.velmora-submit--success
+.velmora-submit__text {
   opacity: 0;
 }
 
-.velmora-submit--success .velmora-submit__check {
+
+/* Show check */
+
+.velmora-submit--success
+.velmora-submit__check {
   opacity: 1;
 
   transform:
@@ -154,14 +235,22 @@
 }
 
 
-/* ROTATION */
+/* =========================
+   SPINNER ROTATION
+========================= */
 
 @keyframes velmora-submit-rotate {
+
   from {
-    transform: rotate(0deg);
+    transform:
+      translate(-50%, -50%)
+      rotate(0deg);
   }
 
   to {
-    transform: rotate(360deg);
+    transform:
+      translate(-50%, -50%)
+      rotate(360deg);
   }
+
 }

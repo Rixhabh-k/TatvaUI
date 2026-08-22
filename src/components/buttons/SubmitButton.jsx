@@ -2,12 +2,17 @@ import { useEffect, useState } from "react";
 import "../../styles/buttons/submitButton.css";
 
 function SubmitButton({
-  children = "SUBMIT",
+  idleText = "SUBMIT",
+  loadingText = "SENDING...",
+  successText = "SUBMITTED",
+
   duration = 2250,
   successDuration = 1250,
+
   color = "#1ECD97",
   loadingColor = "#bbbbbb",
   successColor = "#471ecd",
+
   className = "",
 }) {
   const [status, setStatus] = useState("idle");
@@ -50,7 +55,7 @@ function SubmitButton({
       }}
     >
       <span className="velmora-submit__text">
-        {children}
+        {status === "idle" && idleText}
       </span>
 
       <span className="velmora-submit__spinner" />
