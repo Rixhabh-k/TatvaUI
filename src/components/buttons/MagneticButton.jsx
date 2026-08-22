@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { magnetic } from ".././index.js";
+import { magnetic } from "../../index.js";
 
 function MagneticButton({
   strength = 0.35,

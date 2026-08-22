@@ -1,0 +1,46 @@
+.velmora-fill {
+  position: relative;
+  overflow: hidden;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  color: var(--fill-text-color);
+  background: transparent;
+
+  border: 1px solid currentColor;
+
+  transition: color var(--fill-duration) ease;
+}
+
+.velmora-fill::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  width: 0;
+  height: 100%;
+
+  background: var(--fill-color);
+
+  transition: width var(--fill-duration) ease;
+
+  z-index: 1;
+}
+
+.velmora-fill__text {
+  position: relative;
+  z-index: 2;
+}
+
+.velmora-fill.is-filled {
+  color: var(--fill-hover-text-color);
+}
+
+.velmora-fill.is-filled::after {
+  width: 100%;
+}

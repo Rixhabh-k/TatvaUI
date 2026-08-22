@@ -1,0 +1,54 @@
+.velmora-flip {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+
+.velmora-flip__front,
+.velmora-flip__back {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 180px;
+  height: 60px;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  transition:
+    transform var(--flip-duration, 500ms) ease,
+    opacity var(--flip-duration, 500ms) ease;
+}
+
+.velmora-flip__front {
+  background: var(--flip-front-color, #111);
+  color: #fff;
+
+  transform: rotateX(0deg);
+}
+
+.velmora-flip__back {
+  position: absolute;
+  inset: 0;
+
+  background: var(--flip-back-color, #fff);
+  color: #111;
+
+  transform: rotateX(-90deg);
+}
+
+.velmora-flip.is-flipped .velmora-flip__front {
+  transform: rotateX(90deg);
+}
+
+.velmora-flip.is-flipped .velmora-flip__back {
+  transform: rotateX(0deg);
+}
