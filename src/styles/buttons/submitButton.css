@@ -1,0 +1,167 @@
+.velmora-submit {
+  position: relative;
+  overflow: hidden;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  /*
+    These are only fallbacks.
+    User's class can override them.
+  */
+  width: var(--submit-width, 130px);
+  height: var(--submit-height, 40px);
+
+  background: transparent;
+  color: var(--submit-text, var(--submit-color));
+
+  border: var(--submit-border-width, 2px) solid
+    var(--submit-border-color, var(--submit-color));
+
+  border-radius: var(--submit-radius, 40px);
+
+  font-size: var(--submit-font-size, 12px);
+  font-weight: var(--submit-font-weight, bold);
+  letter-spacing: var(--submit-letter-spacing, 1px);
+
+  transition:
+    width 250ms ease,
+    height 250ms ease,
+    background 250ms ease,
+    color 250ms ease,
+    border-color 250ms ease;
+}
+
+
+/* TEXT */
+
+.velmora-submit__text {
+  position: relative;
+  z-index: 2;
+
+  transition: opacity 200ms ease;
+}
+
+
+/* SPINNER */
+
+.velmora-submit__spinner {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 34px;
+  height: 34px;
+
+  border: 3px solid var(--submit-loading-color);
+  border-left-color: var(--submit-color);
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* CHECK */
+
+.velmora-submit__check {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.5);
+
+  opacity: 0;
+
+  color: var(--submit-success-text, #fff);
+
+  font-size: 18px;
+  font-weight: bold;
+
+  pointer-events: none;
+}
+
+
+/* HOVER */
+
+.velmora-submit--idle:hover {
+  background: var(--submit-hover-bg, var(--submit-color));
+  color: var(--submit-hover-text, #fff);
+}
+
+
+/* LOADING */
+
+.velmora-submit--loading {
+  width: 30px;
+  height: 30px;
+
+  border-width: 2px;
+
+  border-color: var(--submit-loading-color);
+  border-left-color: var(--submit-color);
+
+  background: transparent;
+
+  cursor: default;
+
+  animation: velmora-submit-rotate 2s linear infinite;
+}
+
+.velmora-submit--loading .velmora-submit__text {
+  opacity: 0;
+}
+
+.velmora-submit--loading .velmora-submit__spinner {
+  opacity: 1;
+}
+
+
+/* SUCCESS */
+
+.velmora-submit--success {
+  background: var(--submit-success-bg, var(--submit-success-color));
+  color: var(--submit-success-text, #fff);
+
+  border-color: var(--submit-success-color);
+
+  cursor: default;
+}
+
+.velmora-submit--success .velmora-submit__text {
+  opacity: 0;
+}
+
+.velmora-submit--success .velmora-submit__check {
+  opacity: 1;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1);
+}
+
+
+/* ROTATION */
+
+@keyframes velmora-submit-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

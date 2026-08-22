@@ -1,0 +1,72 @@
+.velmora-position-aware {
+  position: relative;
+  overflow: hidden;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 200px;
+  height: 50px;
+
+  padding: 0;
+
+  border: 2px solid var(--position-aware-fill);
+  background: transparent;
+
+  color: var(--position-aware-text);
+
+  cursor: pointer;
+
+  isolation: isolate;
+
+  transition:
+    color var(--position-aware-duration, 400ms) ease;
+}
+
+.velmora-position-aware__text {
+  position: relative;
+  z-index: 2;
+
+  transition:
+    color var(--position-aware-duration, 400ms) ease;
+
+  /*
+    Automatically keeps the text contrasted
+    against the moving fill.
+  */
+  mix-blend-mode: difference;
+}
+
+.velmora-position-aware__circle {
+  position: absolute;
+
+  width: 0;
+  height: 0;
+
+  left: 0;
+  top: 0;
+
+  border-radius: 50%;
+
+  background: var(--position-aware-fill);
+
+  transform: translate(-50%, -50%);
+
+  transition:
+    width var(--position-aware-duration, 400ms) ease,
+    height var(--position-aware-duration, 400ms) ease;
+
+  z-index: 1;
+}
+
+.velmora-position-aware:hover
+.velmora-position-aware__text {
+  color: #fff;
+}
+
+.velmora-position-aware:hover
+.velmora-position-aware__circle {
+  width: 400px;
+  height: 400px;
+}

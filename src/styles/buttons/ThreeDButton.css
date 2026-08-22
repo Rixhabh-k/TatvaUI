@@ -1,0 +1,105 @@
+.velmora-3d-button {
+  position: relative;
+
+  width: 180px;
+  height: 50px;
+
+  padding: 0;
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  perspective: 800px;
+}
+
+
+/* =========================================
+   3D BODY
+========================================= */
+
+.velmora-3d-button__body {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  transform-style: preserve-3d;
+
+  /* Center axis of the complete box */
+  transform-origin: center center;
+
+  transition:
+    transform var(--3d-duration, 500ms) ease;
+}
+
+
+/* =========================================
+   COMMON FACE
+========================================= */
+
+.velmora-3d-button__face {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+
+/* =========================================
+   FRONT
+========================================= */
+
+.velmora-3d-button__front {
+  background: var(--3d-front-bg);
+  color: var(--3d-front-text);
+
+  /*
+    Half the button's depth.
+    The face sits at the front of the cuboid.
+  */
+  transform: translateZ(25px);
+}
+
+
+/* =========================================
+   TOP / BACK
+========================================= */
+
+.velmora-3d-button__top {
+  background: var(--3d-back-bg);
+  color: var(--3d-back-text);
+
+  /*
+    Same exact dimensions as FRONT.
+
+    It becomes the top face of the box.
+  */
+  transform:
+    rotateX(90deg)
+    translateZ(25px);
+}
+
+
+/* =========================================
+   HOVER
+========================================= */
+
+.velmora-3d-button:hover
+.velmora-3d-button__body {
+  transform: rotateX(-90deg);
+}
