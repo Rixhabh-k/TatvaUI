@@ -1,3 +1,5 @@
+import "../../styles/buttons/ThreeDButton.css";
+
 function ThreeDButton({
   front = "FRONT",
   back = "BACK",

@@ -1,12 +1,37 @@
 {
   "name": "velmora",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Reusable JavaScript and React animations",
+  "type": "module",
+  "main": "./dist/velmora.js",
+  "module": "./dist/velmora.js",
+  "sideEffects": ["*.css"],
+  "exports": {
+    ".": {
+      "import": "./dist/velmora.js"
+    },
+    "./style.css": "./dist/velmora.css"
   },
-  "keywords": [],
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": ["animation", "react", "javascript", "ui", "components"],
   "author": "",
-  "license": "ISC",
-  "description": ""
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rixhabh-k/VelmoraUI.git"
+  },
+  "homepage": "https://github.com/Rixhabh-k/VelmoraUI#readme",
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.0",
+    "vite": "^8.2.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
 }
