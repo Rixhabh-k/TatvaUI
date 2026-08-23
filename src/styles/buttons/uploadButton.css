@@ -1,0 +1,790 @@
+/* =========================================================
+   VELMORA UPLOAD BUTTON
+========================================================= */
+
+.velmora-upload {
+  --ease-in-out-quartic: cubic-bezier(
+    0.77,
+    0,
+    0.175,
+    1
+  );
+
+  position: relative;
+
+  display: inline-block;
+
+  width: fit-content;
+  max-width: 100%;
+
+  flex: 0 0 auto;
+  align-self: center;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 1.7px 1.4px rgba(0, 0, 0, 0.02),
+    0 4px 3.3px rgba(0, 0, 0, 0.028),
+    0 7.5px 6.3px rgba(0, 0, 0, 0.035),
+    0 13.4px 11.2px rgba(0, 0, 0, 0.042),
+    0 25.1px 20.9px rgba(0, 0, 0, 0.05),
+    0 60px 50px rgba(0, 0, 0, 0.07);
+
+  overflow: hidden;
+
+  transform: rotate(0);
+}
+
+
+/* =========================================================
+   STAGE
+   Holds __main and __progress as siblings. In the final
+   phase ONE transform on this element moves both together —
+   that's what keeps the motion physically continuous instead
+   of separate elements animating (and desyncing) on their own.
+========================================================= */
+
+.velmora-upload__stage {
+  position: relative;
+}
+
+
+/* =========================================================
+   MAIN (filename + button + uploading hint)
+   In-flow — this is what gives .velmora-upload its height,
+   since __progress is absolutely positioned and doesn't
+   contribute to layout.
+========================================================= */
+
+.velmora-upload__main {
+  position: relative;
+
+  z-index: 2;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  width: max-content;
+}
+
+.velmora-upload__info {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 16px;
+
+  margin-right: 40px;
+}
+
+.velmora-upload__clip {
+  width: 20px;
+  height: 20px;
+
+  flex: 0 0 auto;
+
+  fill: currentColor;
+}
+
+.velmora-upload__filename {
+  padding-left: 8px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   UPLOAD BUTTON
+========================================================= */
+
+.velmora-upload__button {
+  position: relative;
+
+  z-index: 2;
+
+  padding: 16px;
+  margin: 0;
+
+  font-size: 100%;
+  font-family: inherit;
+
+  color: #fff;
+
+  background: transparent;
+
+  border: none;
+  border-radius: inherit;
+
+  outline: none;
+
+  cursor: pointer;
+
+  transform: scale(0.9);
+}
+
+.velmora-upload__button:disabled {
+  cursor: default;
+}
+
+
+/* BLUE BACKGROUND */
+
+.velmora-upload__button::before {
+  position: absolute;
+
+  content: "";
+
+  z-index: -1;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color:
+    var(--upload-button-color, #3bafda);
+
+  border-radius: 10px;
+
+  transform-origin: right;
+
+  transform: scale(1);
+}
+
+
+/* BUTTON TEXT */
+
+.velmora-upload__button-text {
+  position: relative;
+
+  z-index: 2;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   UPLOADING TEXT
+========================================================= */
+
+.velmora-upload__hint {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  z-index: 4;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: #fff;
+
+  opacity: 0;
+
+  transform: translateY(100%);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   PROGRESS / COMPLETED PANEL
+========================================================= */
+
+.velmora-upload__progress {
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  z-index: 5;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
+  /*
+    Initially only a 3px line.
+  */
+  height: 3px;
+
+  /*
+    IMPORTANT:
+    Text/check must remain invisible
+    while the bar grows vertically.
+  */
+  color: transparent;
+
+  background:
+    var(
+      --upload-progress-color,
+      #2d334c
+    );
+
+  transform: scaleX(0);
+
+  transform-origin: left bottom;
+
+  pointer-events: none;
+}
+
+.velmora-upload__completed-text {
+  white-space: nowrap;
+}
+
+
+/* CHECK */
+
+.velmora-upload__check {
+  width: 16px;
+  height: 16px;
+
+  margin-right: 6px;
+
+  stroke-dasharray: 16px;
+  stroke-dashoffset: 16px;
+
+  opacity: 0;
+}
+
+
+/* =========================================================
+   UPLOADING
+========================================================= */
+
+.velmora-upload--uploading
+.velmora-upload__button {
+  animation:
+    velmora-upload-expand
+    0.3s
+    forwards;
+}
+
+
+.velmora-upload--uploading
+.velmora-upload__button::before {
+  animation:
+    velmora-upload-fill-left
+    1.2s
+    0.4s
+    var(--ease-in-out-quartic)
+    forwards;
+}
+
+
+/* File info disappears */
+
+.velmora-upload--uploading
+.velmora-upload__info > * {
+  animation:
+    velmora-upload-fade-up-out
+    0.4s
+    0.4s
+    forwards;
+}
+
+
+/* Upload button text disappears */
+
+.velmora-upload--uploading
+.velmora-upload__button-text {
+  animation:
+    velmora-upload-fade-up-out
+    0.4s
+    0.4s
+    forwards;
+}
+
+
+/* Uploading text appears */
+
+.velmora-upload--uploading
+.velmora-upload__hint {
+  animation:
+    velmora-upload-fade-up-in
+    0.4s
+    0.8s
+    forwards;
+}
+
+
+/*
+  Progress line:
+  0 → 100%
+*/
+
+.velmora-upload--uploading
+.velmora-upload__progress {
+  animation:
+    velmora-upload-fill-right
+    2s
+    1s
+    var(--ease-in-out-quartic)
+    forwards;
+}
+
+
+/* =========================================================
+   UPLOADED
+========================================================= */
+
+
+/*
+  HOLD THE PREVIOUS STATE
+  so nothing flashes back.
+*/
+
+.velmora-upload--uploaded
+.velmora-upload__info > * {
+  opacity: 0;
+
+  transform:
+    translateY(-40%);
+}
+
+
+.velmora-upload--uploaded
+.velmora-upload__button {
+  transform: scale(1);
+}
+
+
+.velmora-upload--uploaded
+.velmora-upload__button-text {
+  opacity: 0;
+
+  transform:
+    translateY(-40%);
+}
+
+
+.velmora-upload--uploaded
+.velmora-upload__button::before {
+  transform:
+    scale(4, 1.2);
+}
+
+
+/*
+  IMPORTANT:
+
+  Uploading... must disappear
+  BEFORE the progress panel grows.
+*/
+
+.velmora-upload--uploaded
+.velmora-upload__hint {
+  opacity: 0;
+
+  transform:
+    translateY(0);
+}
+
+
+/*
+  SAME progress line.
+
+  Width is already 100%.
+
+  Now only height grows:
+  3px → 100%.
+*/
+
+.velmora-upload--uploaded
+.velmora-upload__progress {
+  transform:
+    scaleX(1);
+
+  height: 3px;
+
+  /*
+    First animation:
+    height grows.
+
+    Second animation:
+    content color appears AFTER
+    the height animation completes.
+  */
+
+  animation:
+    velmora-upload-progress-grow
+      1s
+      var(--ease-in-out-quartic)
+      forwards,
+
+    velmora-upload-progress-reveal
+      0.01s
+      1s
+      linear
+      forwards;
+}
+
+
+/*
+  Checkmark stays hidden until
+  the panel has completely grown.
+*/
+
+.velmora-upload--uploaded
+.velmora-upload__check {
+  opacity: 0;
+
+  stroke-dashoffset: 16px;
+
+  animation:
+    velmora-upload-check
+    0.6s
+    1s
+    var(--ease-in-out-quartic)
+    forwards;
+}
+
+
+/* =========================================================
+   UPLOADED → UPLOADED-AFTER
+   ---------------------------------------------------------
+   Everything below is scoped to BOTH --uploaded and
+   --uploaded-after on purpose. The panel's grown/revealed
+   state (height, color, checkmark) must never be re-declared
+   with a fresh "from" value when the class changes — that's
+   what caused the old blink. Here it's simply carried through
+   unchanged, so there's nothing to snap back to.
+
+   The only thing that actually animates for the final phase
+   is __stage's own transform: one motion, moving __main and
+   __progress together since they inherit it as a shared
+   ancestor transform.
+========================================================= */
+
+.velmora-upload--uploaded
+.velmora-upload__progress,
+.velmora-upload--uploaded-after
+.velmora-upload__progress {
+  height: 100%;
+}
+
+.velmora-upload--uploaded-after
+.velmora-upload__progress {
+  transform: scaleX(1);
+  color: #fff;
+}
+
+.velmora-upload--uploaded-after
+.velmora-upload__check {
+  opacity: 1;
+  stroke-dashoffset: 0;
+}
+
+
+/*
+  __main is fully covered by the opaque, fully-grown progress
+  panel by the time --uploaded-after starts, so jumping it up
+  by one container-height here is invisible — it just sets up
+  the geometry: __main now sits directly above __progress,
+  forming one contiguous strip that __stage will slide as a
+  single unit.
+*/
+
+.velmora-upload--uploaded-after
+.velmora-upload__main {
+  transform: translateY(-100%);
+}
+
+
+/*
+  THE single unified motion. __main and __progress move
+  together because they both live inside __stage and inherit
+  this transform.
+*/
+
+.velmora-upload--uploaded-after
+.velmora-upload__stage {
+  animation:
+    velmora-upload-slide-down-stage
+    1s
+    var(--ease-in-out-quartic)
+    forwards;
+}
+
+
+/* Main content fades back in as it scrolls into view */
+
+.velmora-upload--uploaded-after
+.velmora-upload__info > * {
+  animation:
+    velmora-upload-fade-down-in
+    1s
+    var(--ease-in-out-quartic)
+    forwards;
+}
+
+.velmora-upload--uploaded-after
+.velmora-upload__button-text {
+  animation:
+    velmora-upload-fade-down-in
+    1s
+    var(--ease-in-out-quartic)
+    forwards;
+}
+
+
+/* Button + its background shrink back to idle size */
+
+.velmora-upload--uploaded-after
+.velmora-upload__button {
+  animation:
+    velmora-upload-shrink-button
+    1s
+    var(--ease-in-out-quartic)
+    forwards;
+}
+
+.velmora-upload--uploaded-after
+.velmora-upload__button::before {
+  animation:
+    velmora-upload-shrink-bg
+    1s
+    var(--ease-in-out-quartic)
+    forwards;
+}
+
+
+/* =========================================================
+   KEYFRAMES
+========================================================= */
+
+
+/* Button expands */
+
+@keyframes velmora-upload-expand {
+  from {
+    transform:
+      scale(0.9);
+  }
+
+  to {
+    transform:
+      scale(1);
+  }
+}
+
+
+/* Blue background expands */
+
+@keyframes velmora-upload-fill-left {
+  from {
+    transform:
+      scale(1);
+  }
+
+  to {
+    transform:
+      scale(4, 1.2);
+  }
+}
+
+
+/* Original content goes up */
+
+@keyframes velmora-upload-fade-up-out {
+  from {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+  to {
+    opacity: 0;
+
+    transform:
+      translateY(-40%);
+  }
+}
+
+
+/* Uploading text comes up */
+
+@keyframes velmora-upload-fade-up-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+
+/*
+  PROGRESS:
+  0 → 100%
+*/
+
+@keyframes velmora-upload-fill-right {
+  from {
+    transform:
+      scaleX(0);
+  }
+
+  to {
+    transform:
+      scaleX(1);
+  }
+}
+
+
+/*
+  IMPORTANT:
+
+  SAME progress bar.
+
+  Width remains 100%.
+
+  Only height grows.
+*/
+
+@keyframes velmora-upload-progress-grow {
+  from {
+    height: 3px;
+
+    transform:
+      scaleX(1);
+  }
+
+  to {
+    height: 100%;
+
+    transform:
+      scaleX(1);
+  }
+}
+
+
+/*
+  Once the panel is completely grown,
+  reveal its content color.
+*/
+
+@keyframes velmora-upload-progress-reveal {
+  from {
+    color: transparent;
+  }
+
+  to {
+    color: #fff;
+  }
+}
+
+
+/*
+  Checkmark appears after
+  the panel has grown.
+*/
+
+@keyframes velmora-upload-check {
+  from {
+    opacity: 0;
+
+    stroke-dashoffset: 16px;
+  }
+
+  to {
+    opacity: 1;
+
+    stroke-dashoffset: 0;
+  }
+}
+
+
+/*
+  The single continuous motion for the final phase:
+  __main slides from -100% (hidden above) into view,
+  __progress slides from 0 to +100% (exits below) —
+  both as an inherited effect of moving their shared
+  parent, __stage, by exactly one container-height.
+*/
+
+@keyframes velmora-upload-slide-down-stage {
+  from {
+    transform:
+      translateY(0);
+  }
+
+  to {
+    transform:
+      translateY(100%);
+  }
+}
+
+
+/* Main content (info spans, button text) fades back in */
+
+@keyframes velmora-upload-fade-down-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-40%);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+
+/* Button shrinks back to its idle scale */
+
+@keyframes velmora-upload-shrink-button {
+  from {
+    transform:
+      scale(1);
+  }
+
+  to {
+    transform:
+      scale(0.9);
+  }
+}
+
+
+/* Blue background shrinks back to its idle scale */
+
+@keyframes velmora-upload-shrink-bg {
+  from {
+    transform:
+      scale(4, 1.2);
+  }
+
+  to {
+    transform:
+      scale(1);
+  }
+}
