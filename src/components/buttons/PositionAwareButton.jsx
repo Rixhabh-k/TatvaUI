@@ -9,6 +9,7 @@ function PositionAwareButton({
   hoverTextColor = "#fff",
   duration = 400,
   className = "",
+  ...props
 }) {
   const buttonRef = useRef(null);
 
@@ -24,6 +25,7 @@ function PositionAwareButton({
 
   return (
     <button
+      {...props}
       ref={buttonRef}
       className={`velmora-position-aware ${className}`}
       style={{

@@ -7,6 +7,7 @@ function MagneticButton({
   ease = 0.15,
   className = "",
   children,
+  ...props
 }) {
   const buttonRef = useRef(null);
 
@@ -23,7 +24,7 @@ function MagneticButton({
   }, [strength, radius, ease]);
 
   return (
-    <button ref={buttonRef} className={className}>
+    <button {...props} ref={buttonRef} className={className}>
       {children}
     </button>
   );

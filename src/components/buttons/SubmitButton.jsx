@@ -14,12 +14,19 @@ function SubmitButton({
   successColor = "#471ecd",
 
   className = "",
+  onClick,
+  style,
+  ...props
 }) {
   const [status, setStatus] = useState("idle");
 
-  function handleClick() {
+  function handleClick(event) {
     if (status !== "idle") return;
 
+    // User's onClick
+    onClick?.(event);
+
+    // Velmora's animation
     setStatus("loading");
   }
 
@@ -45,10 +52,12 @@ function SubmitButton({
 
   return (
     <button
+      {...props}
       type="button"
       onClick={handleClick}
       className={`velmora-submit velmora-submit--${status} ${className}`}
       style={{
+        ...style,
         "--submit-color": color,
         "--submit-loading-color": loadingColor,
         "--submit-success-color": successColor,
@@ -56,6 +65,8 @@ function SubmitButton({
     >
       <span className="velmora-submit__text">
         {status === "idle" && idleText}
+        {status === "loading" && loadingText}
+        {status === "success" && successText}
       </span>
 
       <span className="velmora-submit__spinner" />

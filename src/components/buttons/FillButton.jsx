@@ -9,6 +9,7 @@ function FillButton({
   hoverTextColor = "#fff",
   duration = 350,
   className = "",
+  ...props
 }) {
   const buttonRef = useRef(null);
 
@@ -25,6 +26,7 @@ function FillButton({
 
   return (
     <button
+      {...props}
       ref={buttonRef}
       className={`velmora-fill ${className}`}
       style={{

@@ -9,9 +9,11 @@ function ThreeDButton({
   textColor = "#adadaf",
   backTextColor = "#323237",
   className = "",
+  ...props
 }) {
   return (
     <button
+      {...props}
       className={`velmora-3d-button ${className}`}
       style={{
         "--3d-duration": `${duration}ms`,

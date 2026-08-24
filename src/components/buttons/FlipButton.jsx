@@ -9,6 +9,7 @@ function FlipButton({
   frontColor = "#111",
   backColor = "#fff",
   className = "",
+  ...props
 }) {
   const buttonRef = useRef(null);
 
@@ -24,6 +25,7 @@ function FlipButton({
 
   return (
     <button
+      {...props}
       ref={buttonRef}
       className={`velmora-flip ${className}`}
       style={{
