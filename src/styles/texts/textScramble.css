@@ -1,0 +1,8 @@
+.velmora-text-scramble {
+  display: inline-block;
+  font-weight: 100;
+}
+
+.velmora-text-scramble__dud {
+  color: var(--scramble-dud-color, #757575);
+}

@@ -14,4 +14,6 @@ export { default as SubmitButton } from "./components/buttons/SubmitButton.jsx";
 export { default as PositionAwareButton } from "./components/buttons/PositionAwareButton.jsx";
 export { default as UploadButton } from "./components/buttons/UploadButton.jsx";
 
-// this code has been pushed from text animations branch
+//text animations imports
+export { default as TypewriterText } from "./components/texts/TypewriterText.jsx";
+export { default as TextScramble } from "./components/texts/TextScramble.jsx";

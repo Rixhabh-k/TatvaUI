@@ -1,0 +1,31 @@
+.velmora-typewriter {
+  display: inline-flex;
+  align-items: baseline;
+  position: relative;
+}
+
+.velmora-typewriter__text {
+  display: inline-block;
+}
+
+.velmora-typewriter__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 4px;
+  background: currentColor;
+  vertical-align: middle;
+  animation: velmora-typewriter-blink 0.75s infinite;
+}
+
+@keyframes velmora-typewriter-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
