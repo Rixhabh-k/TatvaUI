@@ -17,3 +17,6 @@ export { default as UploadButton } from "./components/buttons/UploadButton.jsx";
 //text animations imports
 export { default as TypewriterText } from "./components/texts/TypewriterText.jsx";
 export { default as TextScramble } from "./components/texts/TextScramble.jsx";
+export { default as ShadowText } from "./components/texts/ShadowText.jsx";
+export { default as WaveText } from "./components/texts/WaveText.jsx";
+export { default as MagicText } from "./components/texts/MagicText.jsx";

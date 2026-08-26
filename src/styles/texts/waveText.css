@@ -1,0 +1,74 @@
+.velmora-wave-text {
+  position: relative;
+
+  display: block;
+
+  width: max-content;
+  max-width: 100%;
+
+  line-height: 1;
+}
+
+.velmora-wave-text__main,
+.velmora-wave-text__copy {
+  display: block;
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  margin: 0;
+  padding: 0;
+
+  white-space: nowrap;
+
+  font-family:
+    var(
+      --wave-text-font-family,
+      inherit
+    );
+
+  font-size:
+    var(
+      --wave-text-size,
+      clamp(60px, 20vw, 200px)
+    );
+
+  font-weight:
+    var(
+      --wave-text-weight,
+      900
+    );
+
+  line-height: 1;
+
+  text-shadow:
+    -2px -2px 0
+      var(--wave-text-outline, #000),
+    2px -2px 0
+      var(--wave-text-outline, #000),
+    -2px 2px 0
+      var(--wave-text-outline, #000),
+    2px 2px 0
+      var(--wave-text-outline, #000);
+
+  transform-origin: center;
+  will-change: transform;
+}
+
+.velmora-wave-text__main {
+  position: relative;
+
+  color:
+    var(
+      --wave-text-color,
+      #e7e7e7
+    );
+
+  z-index: 50;
+}
+
+.velmora-wave-text__copy {
+  pointer-events: none;
+}
