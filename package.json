@@ -1,18 +1,18 @@
 {
-  "name": "velmora",
+  "name": "tatva-ui",
   "version": "1.1.4",
   "description": "Reusable JavaScript and React animations",
   "type": "module",
-  "main": "./dist/velmora.js",
-  "module": "./dist/velmora.js",
+  "main": "./dist/tatva-ui.js",
+  "module": "./dist/tatva-ui.js",
   "sideEffects": [
     "*.css"
   ],
   "exports": {
     ".": {
-      "import": "./dist/velmora.js"
+      "import": "./dist/tatva-ui.js"
     },
-    "./style.css": "./dist/velmora.css"
+    "./style.css": "./dist/tatva-ui.css"
   },
   "files": [
     "dist"
@@ -31,9 +31,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rixhabh-k/VelmoraUI.git"
+    "url": "git+https://github.com/Rixhabh-k/tatva-uiUI.git"
   },
-  "homepage": "https://github.com/Rixhabh-k/VelmoraUI#readme",
+  "homepage": "https://github.com/Rixhabh-k/tatva-uiUI#readme",
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"

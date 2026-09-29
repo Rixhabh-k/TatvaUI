@@ -1,17 +1,17 @@
-# Velmora
+# tatva-ui
 
 Interactive animations and components for React.
 
 ## Install
 
 ```bash
-npm install velmora
+npm install tatva-ui
 ```
 
 ## Usage
 
 ```jsx
-import { ElementName } from "velmora";
+import { ElementName } from "tatva-ui";
 ```
 
 ```jsx
