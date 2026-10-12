@@ -1,0 +1,209 @@
+:root {
+  --tattva-pixel-bg: #09090b;
+  --tattva-pixel-fg: #e3e3e3;
+
+  --tattva-pixel-surface-1: #101012;
+  --tattva-pixel-surface-2: #27272a;
+  --tattva-pixel-surface-3: #52525b;
+
+  --tattva-pixel-ease-out:
+    cubic-bezier(0.5, 1, 0.89, 1);
+
+  --tattva-pixel-ease-in-out:
+    cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+/* =========================================
+   CARD
+   ========================================= */
+
+:where(.tattva-pixel-card) {
+  position: relative;
+
+  overflow: hidden;
+
+  display: grid;
+
+  grid-template-areas: "card";
+
+  place-items: center;
+
+  aspect-ratio: 4 / 5;
+
+  width: 100%;
+
+  min-width: 0;
+
+  border: 1px solid var(--tattva-pixel-surface-2);
+
+  background: var(--tattva-pixel-bg);
+
+  isolation: isolate;
+
+  transition:
+    border-color 200ms
+    var(--tattva-pixel-ease-out);
+
+  user-select: none;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
+   DARK VIGNETTE
+   ========================================= */
+
+:where(.tattva-pixel-card)::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at bottom left,
+      transparent 55%,
+      var(--tattva-pixel-surface-1)
+    );
+
+  pointer-events: none;
+
+  box-shadow:
+    var(--tattva-pixel-bg)
+    -0.5cqi
+    0.5cqi
+    2.5cqi
+    inset;
+
+  transition:
+    opacity 900ms
+    var(--tattva-pixel-ease-out);
+}
+
+
+/* =========================================
+   CENTER GLOW
+   ========================================= */
+
+:where(.tattva-pixel-card)::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  margin: auto;
+
+  aspect-ratio: 1;
+
+  background:
+    radial-gradient(
+      circle,
+      var(--tattva-pixel-bg),
+      transparent 65%
+    );
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition:
+    opacity 800ms
+    var(--tattva-pixel-ease-out);
+}
+
+
+/* =========================================
+   CANVAS
+   ========================================= */
+
+:where(.tattva-pixel-card__canvas) {
+  grid-area: card;
+
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  z-index: 0;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   CONTENT
+   ========================================= */
+
+:where(.tattva-pixel-card__content) {
+  grid-area: card;
+
+  position: relative;
+
+  z-index: 1;
+
+  color: var(--tattva-pixel-surface-3);
+
+  transition:
+    color 300ms var(--tattva-pixel-ease-out),
+    transform 300ms var(--tattva-pixel-ease-out);
+}
+
+
+/* =========================================
+   HOVER
+   ========================================= */
+
+:where(.tattva-pixel-card:hover) {
+  border-color:
+    var(--tattva-pixel-active-color, var(--tattva-pixel-fg));
+
+  transition:
+    border-color 800ms
+    var(--tattva-pixel-ease-in-out);
+}
+
+:where(.tattva-pixel-card:hover)::before {
+  opacity: 0;
+}
+
+:where(.tattva-pixel-card:hover)::after {
+  opacity: 1;
+}
+
+:where(.tattva-pixel-card:hover)
+.tattva-pixel-card__content {
+  color:
+    var(--tattva-pixel-active-color, var(--tattva-pixel-fg));
+
+  transform: scale(1.1);
+
+  transition:
+    300ms
+    var(--tattva-pixel-ease-in-out);
+}
+
+
+/* =========================================
+   FOCUS
+   ========================================= */
+
+:where(.tattva-pixel-card:focus-visible) {
+  outline:
+    5px auto Highlight;
+
+  outline:
+    5px auto
+    -webkit-focus-ring-color;
+}
+
+:where(.tattva-pixel-card:focus-within) {
+  border-color:
+    var(--tattva-pixel-active-color, var(--tattva-pixel-fg));
+}

@@ -1,0 +1,67 @@
+:where(.tattva-3d-card-wrapper) {
+  perspective: var(--tattva-card-perspective, 1500px);
+}
+
+:where(.tattva-3d-card) {
+  box-sizing: border-box;
+
+  width: 300px;
+  height: 400px;
+
+  padding: 1em;
+
+  font-weight: bold;
+  text-align: right;
+  color: #181a1a;
+
+  border-radius: 10px;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+  overflow: hidden;
+
+  transform:
+    scale3d(1, 1, 1)
+    rotate3d(
+      var(--tattva-card-rotate-x, 0),
+      var(--tattva-card-rotate-y, 0),
+      0,
+      var(--tattva-card-angle, 0deg)
+    );
+
+  transition:
+    transform 300ms ease-out;
+
+  will-change: transform;
+}
+
+:where(.tattva-3d-card:hover) {
+  transition-duration: 150ms;
+
+  transform:
+    scale3d(1.07, 1.07, 1.07)
+    rotate3d(
+      var(--tattva-card-rotate-x, 0),
+      var(--tattva-card-rotate-y, 0),
+      0,
+      var(--tattva-card-angle, 0deg)
+    );
+}
+
+:where(.tattva-3d-card__glow) {
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(
+      circle at 50% -20%,
+      #ffffff22,
+      transparent
+    );
+}

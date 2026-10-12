@@ -20,3 +20,9 @@ export { default as TextScramble } from "./components/texts/TextScramble.jsx";
 export { default as ShadowText } from "./components/texts/ShadowText.jsx";
 export { default as WaveText } from "./components/texts/WaveText.jsx";
 export { default as MagicText } from "./components/texts/MagicText.jsx";
+
+//cards animations imports
+export {default as ThreeDCard } from "./components/cards/ThreeDCard.jsx"
+export {default as GliterCard } from "./components/cards/GlitterCard.jsx"
+export {default as PixelCard } from "./components/cards/PixelCard.jsx"
+export {default as AnimatedBorderCard } from "./components/cards/AnimatedBorderCard.jsx"
