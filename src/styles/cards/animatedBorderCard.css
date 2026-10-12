@@ -1,19 +1,46 @@
+/*
+  Tattva AnimatedBorderCard
+
+  Sab kuch CSS variables se control hota hai (component inline set karta hai):
+    --tattva-border-color-1/2/3
+    --tattva-radius            -> outer (border wale box) ka radius
+    --tattva-border-width      -> border ki motai (1px - 2px recommended)
+    --tattva-duration          -> ek full rotation ka time
+    --tattva-direction         -> normal | reverse
+
+  Inner box ka radius automatically = outer radius - border width
+  isliye border hamesha uniform dikhta hai.
+
+  :where() use kiya hai taaki specificity 0 rahe aur user apni
+  className / style se easily override kar sake.
+*/
+
 :where(.tattva-animated-border-card) {
   --tattva-border-color-1: #22d3ee;
   --tattva-border-color-2: #facc15;
   --tattva-border-color-3: #ec4899;
+  --tattva-radius: 20px;
+  --tattva-border-width: 1.5px;
+  --tattva-duration: 5s;
+  --tattva-direction: normal;
+  --tattva-surface: #111310;
+  --tattva-backdrop: #181a17;
 
   position: relative;
+  box-sizing: border-box;
   width: 360px;
   height: 280px;
-  padding: 1.5px;
-  border-radius: 20px;
+  max-width: 100%;
+
+  /* ye padding hi "colorful border" banata hai */
+  padding: var(--tattva-border-width);
+  border-radius: var(--tattva-radius);
   overflow: hidden;
   isolation: isolate;
-  background: #181a17;
+  background: var(--tattva-backdrop);
 }
 
-/* Moving gradient border */
+/* Lower box: rotating conic gradient */
 :where(.tattva-animated-border-card)::before {
   content: "";
   position: absolute;
@@ -33,10 +60,11 @@
     transparent 360deg
   );
 
-  animation: tattva-animated-border-rotate 5s linear infinite;
+  animation: tattva-animated-border-rotate var(--tattva-duration) linear infinite;
+  animation-direction: var(--tattva-direction);
 }
 
-/* Soft glow behind the border */
+/* Soft glow (optional, glow={false} se hat jata hai) */
 :where(.tattva-animated-border-card__glow) {
   position: absolute;
   inset: -15px;
@@ -55,14 +83,15 @@
   filter: blur(18px);
   opacity: 0.25;
 
-  animation: tattva-animated-border-rotate 5s linear infinite;
+  animation: tattva-animated-border-rotate var(--tattva-duration) linear infinite;
+  animation-direction: var(--tattva-direction);
 }
 
-/* Card surface */
+/* Upper box: card surface */
 :where(.tattva-animated-border-card__content) {
   position: relative;
   z-index: 1;
-
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
 
@@ -72,9 +101,9 @@
   align-items: center;
 
   padding: 24px;
-  box-sizing: border-box;
 
-  border-radius: 18.5px;
+  /* outer radius - border width, kabhi negative nahi hoga */
+  border-radius: max(0px, calc(var(--tattva-radius) - var(--tattva-border-width)));
 
   background:
     radial-gradient(
@@ -82,10 +111,30 @@
       rgba(30, 80, 90, 0.15),
       transparent 35%
     ),
-    #111310;
+    var(--tattva-surface);
 
   color: #fff;
   overflow: hidden;
+}
+
+/* ---------- trigger="hover" ---------- */
+:where(.tattva-animated-border-card[data-trigger="hover"])::before,
+:where(.tattva-animated-border-card[data-trigger="hover"]) .tattva-animated-border-card__glow {
+  opacity: 0;
+  animation-play-state: paused;
+  transition: opacity 0.3s ease;
+}
+
+:where(.tattva-animated-border-card[data-trigger="hover"]:hover)::before,
+:where(.tattva-animated-border-card[data-trigger="hover"]:focus-within)::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+:where(.tattva-animated-border-card[data-trigger="hover"]:hover) .tattva-animated-border-card__glow,
+:where(.tattva-animated-border-card[data-trigger="hover"]:focus-within) .tattva-animated-border-card__glow {
+  opacity: 0.25;
+  animation-play-state: running;
 }
 
 @keyframes tattva-animated-border-rotate {
