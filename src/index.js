@@ -28,3 +28,4 @@ export {default as PixelCard } from "./components/cards/PixelCard.jsx"
 export {default as AnimatedBorderCard } from "./components/cards/AnimatedBorderCard.jsx"
 export {default as ShowCard } from "./components/cards/ShowCard.jsx"
 export {default as NeoBrutalism } from "./components/cards/NeoBrutalism.jsx"
+export { default as CircleExpand } from "./components/cards/CircleExpand.jsx";
