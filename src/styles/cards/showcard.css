@@ -1,0 +1,379 @@
+/*
+  Tattva ShowCard
+
+  Customizable CSS variables (props se ya apne CSS / `style` se override karo):
+    --tattva-sc-width           card ki width
+    --tattva-sc-bg              main card ka background
+    --tattva-sc-panel-bg        expand hone wale panel ka background
+    --tattva-sc-text            heading + toggle chevron color
+    --tattva-sc-muted           description + toggle label color
+    --tattva-sc-title           image par title ka color
+    --tattva-sc-subtitle        image par subtitle ka color
+    --tattva-sc-chip-bg         tag background
+    --tattva-sc-chip-text       tag text color
+    --tattva-sc-divider         panel ke andar divider line
+    --tattva-sc-radius          card ka radius
+    --tattva-sc-image-radius    image ka radius
+    --tattva-sc-panel-radius    panel ka radius
+    --tattva-sc-duration        expand / collapse animation time
+    --tattva-sc-overlay         image ke neeche wala dark gradient color
+
+  NOTE: layout-critical styles normal class specificity use karte hain taaki
+  host app ke global resets inhe break na karein. Variables aur look & feel
+  :where() me hain, isliye user ek class se override kar sakta hai.
+  Root par koi margin / position set nahi hai, taaki user apni className se
+  card ko apne UI me kahin bhi place kar sake.
+*/
+
+/* ---------- Customizable defaults (zero specificity) ---------- */
+:where(.tattva-show-card) {
+  --tattva-sc-width: 360px;
+  --tattva-sc-bg: #fcfcf8;
+  --tattva-sc-panel-bg: #efefed;
+  --tattva-sc-text: #1a1a1a;
+  --tattva-sc-muted: #7a7a76;
+  --tattva-sc-title: #ffffff;
+  --tattva-sc-subtitle: rgba(255, 255, 255, 0.7);
+  --tattva-sc-chip-bg: #dcdcd8;
+  --tattva-sc-chip-text: #555555;
+  --tattva-sc-divider: #d4d4d0;
+  --tattva-sc-radius: 28px;
+  --tattva-sc-image-radius: 20px;
+  --tattva-sc-panel-radius: 22px;
+  --tattva-sc-duration: 0.45s;
+  --tattva-sc-overlay: rgba(110, 0, 15, 0.55);
+
+  width: var(--tattva-sc-width);
+  font-family:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+/* ---------- Card shell ---------- */
+.tattva-show-card {
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 10px;
+  border-radius: var(--tattva-sc-radius);
+  background: var(--tattva-sc-bg);
+  color: var(--tattva-sc-text);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+  /* Mobile: font auto-inflate aur tap highlight band */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-show-card *,
+.tattva-show-card *::before,
+.tattva-show-card *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Image ---------- */
+.tattva-show-card__media {
+  position: relative;
+  aspect-ratio: 10 / 7;
+  overflow: hidden;
+  border-radius: var(--tattva-sc-image-radius);
+  box-shadow: 0 8px 14px -6px rgba(200, 0, 30, 0.45);
+  background: #b00020;
+
+  /* Image par tap / long-press karne par selection ya callout na aaye */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.tattva-show-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Default image jab user image na de */
+.tattva-show-card__placeholder {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255, 255, 255, 0.28), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(255, 120, 130, 0.35), transparent 50%),
+    linear-gradient(135deg, #ff2d3d, #a3001b);
+}
+
+/* Bottom dark gradient taaki text readable rahe */
+.tattva-show-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, var(--tattva-sc-overlay), transparent 50%);
+}
+
+/* Poori image ko clickable banane wala link */
+.tattva-show-card__image-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-show-card__caption {
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tattva-show-card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--tattva-sc-title);
+}
+
+.tattva-show-card__subtitle {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--tattva-sc-subtitle);
+}
+
+/* ---------- Preview button (sirf expand hone par dikhta hai) ---------- */
+.tattva-show-card__preview {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 3;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition:
+    opacity var(--tattva-sc-duration) ease,
+    transform var(--tattva-sc-duration) ease,
+    visibility 0s linear var(--tattva-sc-duration),
+    background 0.2s ease;
+}
+
+.tattva-show-card[data-open="true"] .tattva-show-card__preview {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+/* ---------- Expandable panel ---------- */
+.tattva-show-card__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--tattva-sc-duration) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tattva-show-card[data-open="true"] .tattva-show-card__panel {
+  grid-template-rows: 1fr;
+}
+
+.tattva-show-card__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--tattva-sc-duration) ease,
+    visibility 0s linear var(--tattva-sc-duration);
+}
+
+.tattva-show-card[data-open="true"] .tattva-show-card__panel-inner {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.tattva-show-card__details {
+  margin-top: 10px;
+  padding: 16px 18px;
+  border-radius: var(--tattva-sc-panel-radius);
+  background: var(--tattva-sc-panel-bg);
+}
+
+.tattva-show-card__heading {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--tattva-sc-text);
+}
+
+.tattva-show-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tattva-show-card__tag {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--tattva-sc-chip-bg);
+  color: var(--tattva-sc-chip-text);
+  font-size: 11.5px;
+  line-height: 1;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-show-card__divider {
+  height: 0;
+  margin: 14px 0 10px;
+  border: 0;
+  border-top: 1px solid var(--tattva-sc-divider);
+}
+
+.tattva-show-card__description {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--tattva-sc-muted);
+}
+
+/* ---------- Toggle ---------- */
+.tattva-show-card__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--tattva-sc-text);
+  font: inherit;
+  cursor: pointer;
+
+  /* Mobile fixes: blue/grey tap flash, double-tap select / zoom, native button look */
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* Mouse / touch click par outline nahi, sirf keyboard focus par */
+.tattva-show-card__toggle:focus,
+.tattva-show-card__preview:focus,
+.tattva-show-card__image-link:focus {
+  outline: none;
+}
+
+.tattva-show-card__chevron {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  transition: transform var(--tattva-sc-duration) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tattva-show-card[data-open="true"] .tattva-show-card__chevron {
+  transform: rotate(180deg);
+}
+
+/* "View" / "Close" label */
+.tattva-show-card__toggle-label {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  font-size: 13px;
+  color: var(--tattva-sc-muted);
+  transition:
+    max-width 0.3s ease,
+    opacity 0.3s ease,
+    margin 0.3s ease;
+}
+
+.tattva-show-card__toggle:focus-visible .tattva-show-card__toggle-label {
+  max-width: 80px;
+  margin-left: 4px;
+  opacity: 1;
+}
+
+.tattva-show-card__toggle:focus-visible,
+.tattva-show-card__preview:focus-visible,
+.tattva-show-card__image-link:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Hover effects sirf un devices par jahan real hover hota hai.
+   Phone par tap ke baad hover "chipak" jata hai, isliye wahan nahi lagate. */
+@media (hover: hover) {
+  .tattva-show-card__toggle:hover .tattva-show-card__toggle-label {
+    max-width: 80px;
+    margin-left: 4px;
+    opacity: 1;
+  }
+
+  .tattva-show-card__preview:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  a.tattva-show-card__tag:hover {
+    filter: brightness(0.94);
+  }
+}
+
+/* Touch devices par bada tap target */
+@media (pointer: coarse) {
+  .tattva-show-card__toggle {
+    height: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-show-card__panel,
+  .tattva-show-card__panel-inner,
+  .tattva-show-card__chevron,
+  .tattva-show-card__preview,
+  .tattva-show-card__toggle-label {
+    transition: none;
+  }
+}
