@@ -1,0 +1,157 @@
+:where(.tattva-neobrutalism) {
+  box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
+
+  width: var(--tattva-neo-width, 290px);
+  max-width: 100%;
+  height: var(--tattva-neo-height, auto);
+  min-height: var(--tattva-neo-min-height, 330px);
+
+  background: var(--tattva-neo-shadow, #171717);
+  border-radius: 0;
+}
+
+/* Card surface moves while the shadow stays in place */
+:where(.tattva-neobrutalism__surface) {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+
+  border: var(--tattva-neo-border-width, 3px) solid
+    var(--tattva-neo-border, #171717);
+
+  background: var(--tattva-neo-card-bg, #fff);
+  color: var(--tattva-neo-title, #171717);
+
+  transform: translate(0, 0);
+  transition: transform 180ms ease;
+}
+
+/* Colored header strip */
+:where(.tattva-neobrutalism__header) {
+  box-sizing: border-box;
+  flex-shrink: 0;
+
+  padding: 12px;
+
+  background: var(--tattva-neo-header-bg, #f078f2);
+  color: var(--tattva-neo-header-text, #000);
+
+  border-bottom: var(--tattva-neo-border-width, 3px) solid
+    var(--tattva-neo-border, #171717);
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+/* Main content */
+:where(.tattva-neobrutalism__body) {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+
+  min-width: 0;
+  padding: 14px 12px 12px;
+}
+
+:where(.tattva-neobrutalism__date) {
+  margin: 0 0 9px;
+
+  color: var(--tattva-neo-date, #737373);
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+:where(.tattva-neobrutalism__title) {
+  margin: 0 0 12px;
+
+  color: var(--tattva-neo-title, #171717);
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(20px, 5vw, 24px);
+  font-weight: 800;
+  line-height: 1.38;
+  letter-spacing: -0.5px;
+  overflow-wrap: anywhere;
+}
+
+:where(.tattva-neobrutalism__description) {
+  margin: 0 0 20px;
+
+  color: var(--tattva-neo-description, #404040);
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+/* Link stays at the bottom of the content */
+:where(.tattva-neobrutalism__link) {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: auto;
+  padding-top: 12px;
+
+  color: var(--tattva-neo-link, #171717);
+  background: transparent;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: gap 180ms ease;
+}
+
+:where(.tattva-neobrutalism__link svg) {
+  flex-shrink: 0;
+  transition: transform 180ms ease;
+}
+
+/* Permanent offset shadow effect on hover */
+@media (hover: hover) {
+  :where(.tattva-neobrutalism:hover .tattva-neobrutalism__surface) {
+    transform: translate(
+      calc(var(--tattva-neo-hover-offset, 3px) * -1),
+      calc(var(--tattva-neo-hover-offset, 3px) * -1)
+    );
+  }
+
+  :where(.tattva-neobrutalism:hover .tattva-neobrutalism__link) {
+    gap: 14px;
+  }
+
+  :where(.tattva-neobrutalism:hover .tattva-neobrutalism__link svg) {
+    transform: translateX(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.tattva-neobrutalism__surface),
+  :where(.tattva-neobrutalism__link),
+  :where(.tattva-neobrutalism__link svg) {
+    transition: none;
+  }
+}
