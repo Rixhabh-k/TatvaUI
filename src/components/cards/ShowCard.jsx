@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import "../../styles/cards/showcard.css";
 
 const DEFAULT_TAGS = ["React.js", "SCSS", "CSS"];
+const DEFAULT_IMAGE = "https://i.pinimg.com/736x/e9/f5/3b/e9f53bfb32d1fb4964e8c722847f0c54.jpg";
 
 const DEFAULT_DESCRIPTION =
   "Tatva UI is a modern React animation library designed to bring interfaces to life through expressive motion, interactive components, and thoughtful design. I built a cohesive collection of animations focused on fluidity, precision, and creative freedom. The goal is to help developers craft digital experiences that feel dynamic, intuitive, and purposeful—where every interaction has meaning and every detail matters.";
@@ -71,7 +72,7 @@ function ChevronIcon() {
  * @param {object}  [props.style]
  */
 function ShowCard({
-  image,
+  image=DEFAULT_IMAGE,
   imageAlt,
   title = "Tatva UI",
   subtitle = "Design Library",
