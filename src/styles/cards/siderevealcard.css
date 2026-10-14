@@ -1,0 +1,390 @@
+/*
+  Tattva SideRevealCard
+
+  Customizable CSS variables (props se ya apne CSS / `style` se override karo):
+
+  Layout
+    --tattva-sr-width / --tattva-sr-height   card ka size
+    --tattva-sr-radius                        card ka radius
+    --tattva-sr-duration                      slide animation ka time
+    --tattva-sr-title-font                    title ka font-family
+
+  Card 1 (front)
+    --tattva-sr-title / --tattva-sr-subtitle  text colors
+    --tattva-sr-arrow-bg                      arrow circle ka initial color
+    --tattva-sr-arrow-hover-bg                arrow circle ka hover color
+    --tattva-sr-arrow-icon                    arrow icon color
+    --tattva-sr-overlay-top / -bottom         hover par aane wala dark overlay
+
+  Card 2 (back)
+    --tattva-sr-back-bg                       card background
+    --tattva-sr-description                   description text color
+    --tattva-sr-back-title / -subtitle        title + subtitle colors
+    --tattva-sr-back-arrow-bg / -icon         back arrow ke colors
+    --tattva-sr-quote                         quote icon color
+
+  NOTE: layout-critical styles normal class specificity use karte hain taaki
+  host app ke global resets inhe break na karein. Variables aur look & feel
+  :where() me hain, isliye user ek class se override kar sakta hai.
+  Root par margin / position set nahi hai, user apni className se place kare.
+*/
+
+/* ---------- Customizable defaults (zero specificity) ---------- */
+:where(.tattva-side-reveal-card) {
+  --tattva-sr-width: 300px;
+  --tattva-sr-height: 330px;
+  --tattva-sr-radius: 12px;
+  --tattva-sr-duration: 0.6s;
+  --tattva-sr-title-font: "Anton", Impact, "Haettenschweiler", "Arial Narrow Bold",
+    sans-serif;
+
+  --tattva-sr-title: #ffffff;
+  --tattva-sr-subtitle: rgba(255, 255, 255, 0.75);
+  --tattva-sr-arrow-bg: #ffffff;
+  --tattva-sr-arrow-hover-bg: #eaff4d;
+  --tattva-sr-arrow-icon: #000000;
+  --tattva-sr-overlay-top: rgba(0, 0, 0, 0.1);
+  --tattva-sr-overlay-bottom: rgba(0, 0, 0, 0.88);
+
+  --tattva-sr-back-bg: #ffffff;
+  --tattva-sr-description: #444444;
+  --tattva-sr-back-title: #000000;
+  --tattva-sr-back-subtitle: #111111;
+  --tattva-sr-back-arrow-bg: #000000;
+  --tattva-sr-back-arrow-icon: #ffffff;
+  --tattva-sr-quote: #e4e4e4;
+
+  width: var(--tattva-sr-width);
+  height: var(--tattva-sr-height);
+  font-family:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+:where(.tattva-side-reveal-card__title),
+:where(.tattva-side-reveal-card__back-title) {
+  font-family: var(--tattva-sr-title-font);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+/* ---------- Card shell ---------- */
+.tattva-side-reveal-card {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--tattva-sr-radius);
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-side-reveal-card *,
+.tattva-side-reveal-card *::before,
+.tattva-side-reveal-card *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Dono faces ek horizontal track par hain, track slide hota hai */
+.tattva-side-reveal-card__track {
+  display: flex;
+  width: 200%;
+  height: 100%;
+  transform: translateX(0);
+  transition: transform var(--tattva-sr-duration) cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform;
+}
+
+.tattva-side-reveal-card[data-open="true"] .tattva-side-reveal-card__track {
+  transform: translateX(-50%);
+}
+
+.tattva-side-reveal-card__face {
+  position: relative;
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--tattva-sr-radius);
+}
+
+/* Jo face dikh nahi raha wo keyboard tab me bhi na aaye (slide ke baad) */
+.tattva-side-reveal-card__front {
+  visibility: visible;
+  transition: visibility 0s linear 0s;
+}
+
+.tattva-side-reveal-card__back {
+  visibility: hidden;
+  transition: visibility 0s linear var(--tattva-sr-duration);
+}
+
+.tattva-side-reveal-card[data-open="true"] .tattva-side-reveal-card__front {
+  visibility: hidden;
+  transition-delay: var(--tattva-sr-duration);
+}
+
+.tattva-side-reveal-card[data-open="true"] .tattva-side-reveal-card__back {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* ---------- Front face ---------- */
+.tattva-side-reveal-card__front {
+  color: var(--tattva-sr-title);
+  background: #1f2a2a;
+}
+
+.tattva-side-reveal-card__image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+/* Default image jab user image na de */
+.tattva-side-reveal-card__placeholder {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255, 200, 170, 0.35), transparent 40%),
+    linear-gradient(180deg, #4f9c8f 0%, #2c4a47 45%, #5a3a30 100%);
+}
+
+/* Hover par dark overlay: neeche zyada dark, upar halka */
+.tattva-side-reveal-card__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--tattva-sr-overlay-top),
+    var(--tattva-sr-overlay-bottom)
+  );
+  transition: opacity 0.4s ease;
+}
+
+.tattva-side-reveal-card__arrow {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--tattva-sr-arrow-bg);
+  color: var(--tattva-sr-arrow-icon);
+  cursor: pointer;
+
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.tattva-side-reveal-card__arrow-icon {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.tattva-side-reveal-card__caption {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 18px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tattva-side-reveal-card__title {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.05;
+  color: var(--tattva-sr-title);
+}
+
+.tattva-side-reveal-card__subtitle {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--tattva-sr-subtitle);
+}
+
+/* ---------- Back face ---------- */
+.tattva-side-reveal-card__back {
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  background: var(--tattva-sr-back-bg);
+  color: var(--tattva-sr-description);
+}
+
+.tattva-side-reveal-card__back-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex: none;
+}
+
+.tattva-side-reveal-card__back-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--tattva-sr-back-arrow-bg);
+  color: var(--tattva-sr-back-arrow-icon);
+  cursor: pointer;
+
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.tattva-side-reveal-card__quote {
+  width: 40px;
+  height: 40px;
+  color: var(--tattva-sr-quote);
+  pointer-events: none;
+}
+
+.tattva-side-reveal-card__description {
+  flex: 0 1 auto;
+  min-height: 0;
+  margin: auto 0 0;
+  padding-bottom: 16px;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--tattva-sr-description);
+}
+
+.tattva-side-reveal-card__back-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: none;
+  margin-top: 16px;
+}
+
+.tattva-side-reveal-card__thumb {
+  flex: none;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #4f9c8f;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+.tattva-side-reveal-card__thumb--placeholder {
+  background: linear-gradient(180deg, #4f9c8f 0%, #5a3a30 100%);
+}
+
+.tattva-side-reveal-card__back-text {
+  min-width: 0;
+}
+
+.tattva-side-reveal-card__back-title {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.05;
+  color: var(--tattva-sr-back-title);
+}
+
+.tattva-side-reveal-card__back-subtitle {
+  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--tattva-sr-back-subtitle);
+}
+
+/* ---------- Focus: sirf keyboard par outline ---------- */
+.tattva-side-reveal-card__arrow:focus,
+.tattva-side-reveal-card__back-arrow:focus {
+  outline: none;
+}
+
+.tattva-side-reveal-card__arrow:focus-visible,
+.tattva-side-reveal-card__back-arrow:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 3px;
+}
+
+/* ---------- Hover effects: sirf real hover wale devices par ---------- */
+@media (hover: hover) {
+  .tattva-side-reveal-card__front:hover .tattva-side-reveal-card__overlay {
+    opacity: 1;
+  }
+
+  .tattva-side-reveal-card__front:hover .tattva-side-reveal-card__arrow {
+    background: var(--tattva-sr-arrow-hover-bg);
+  }
+}
+
+/* Keyboard se arrow par focus aaye to bhi same effect
+   (:focus-visible, taaki mouse / touch click ke baad overlay atka na rahe) */
+.tattva-side-reveal-card__front:has(.tattva-side-reveal-card__arrow:focus-visible)
+  .tattva-side-reveal-card__overlay {
+  opacity: 1;
+}
+
+.tattva-side-reveal-card__arrow:focus-visible {
+  background: var(--tattva-sr-arrow-hover-bg);
+}
+
+/* Touch devices par bada tap target */
+@media (pointer: coarse) {
+  .tattva-side-reveal-card__arrow,
+  .tattva-side-reveal-card__back-arrow {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-side-reveal-card__track,
+  .tattva-side-reveal-card__overlay,
+  .tattva-side-reveal-card__arrow {
+    transition: none;
+  }
+}

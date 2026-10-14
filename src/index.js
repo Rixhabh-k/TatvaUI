@@ -29,3 +29,4 @@ export {default as AnimatedBorderCard } from "./components/cards/AnimatedBorderC
 export {default as ShowCard } from "./components/cards/ShowCard.jsx"
 export {default as NeoBrutalism } from "./components/cards/NeoBrutalism.jsx"
 export { default as CircleExpand } from "./components/cards/CircleExpand.jsx";
+export { default as SideRevealCard } from "./components/cards/SideRevealCard.jsx";
