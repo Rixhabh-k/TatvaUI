@@ -1,0 +1,218 @@
+/* Tattva UI — FolderCard
+   Closed: a tall folder covers the card and the image is tucked behind it.
+   Open (hover): the folder's height shrinks and the image rises out of it.
+   Stacking inside .fc-inner: image background → image (z1) → folder (z2). */
+
+.fc-card {
+  --fc-pad: 18px; /* inner text padding */
+  --fc-fillet: calc(var(--fc-tab-h, 16px) / 2); /* concave curve; equals the tab corner radius so the S-curve is continuous */
+
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: var(--fc-width, 260px);
+  height: var(--fc-height, 340px);
+  min-width: var(--fc-min-width, 0);
+  max-width: var(--fc-max-width, 100%);
+  padding: var(--fc-panel-padding, 6px);
+  border-radius: var(--fc-radius, 24px);
+  background: var(--fc-panel-color, #08063f);
+  font-family: inherit;
+  /* Lets text scale with card width via cqw units (fallbacks below). */
+  container-type: inline-size;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fc-card--interactive {
+  cursor: pointer;
+}
+
+.fc-card:focus {
+  outline: none;
+}
+
+.fc-card:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.55);
+}
+
+/* Inner window: clips image and folder to rounded corners */
+.fc-inner {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: max(0px, calc(var(--fc-radius, 24px) - var(--fc-panel-padding, 6px)));
+  clip-path: inset(0 round max(0px, calc(var(--fc-radius, 24px) - var(--fc-panel-padding, 6px))));
+  background: var(--fc-image-bg, #4b32dc);
+}
+
+/* Image.
+   .fc-stage is clipped at the folder's body line (it follows the folder height,
+   same duration and easing), so the image can never show above the folder when
+   closed. .fc-media is pushed down by exactly that line's distance when closed. */
+.fc-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  clip-path: inset(0 0 calc(var(--fc-folder-h, 78%) - var(--fc-tab-h, 16px)) 0);
+  transition: clip-path var(--fc-duration, 650ms) var(--fc-easing);
+}
+
+.fc-card--open .fc-stage {
+  clip-path: inset(0 0 calc(var(--fc-folder-open-h, 50%) - var(--fc-tab-h, 16px)) 0);
+}
+
+.fc-media {
+  position: absolute;
+  inset: 0;
+  transform: translateY(calc(100% - var(--fc-folder-h, 78%) + var(--fc-tab-h, 16px)));
+  transition: transform var(--fc-duration, 650ms) var(--fc-easing);
+  will-change: transform;
+}
+
+.fc-card--open .fc-media {
+  transform: translateY(0);
+}
+
+.fc-image {
+  position: absolute;
+  top: var(--fc-image-top, 6%);
+  left: 50%;
+  display: block;
+  width: var(--fc-image-w, 80%);
+  height: var(--fc-image-h, 58%);
+  object-fit: var(--fc-image-fit, contain);
+  transform: translateX(-50%) scale(0.92);
+  transform-origin: 50% 100%;
+  transition: transform var(--fc-duration, 650ms) var(--fc-easing);
+  user-select: none;
+}
+
+.fc-card--open .fc-image {
+  transform: translateX(-50%) scale(1);
+}
+
+/* Folder shell: anchored to the bottom, its height is what animates. */
+.fc-folder {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--fc-folder-h, 78%);
+  transition: height var(--fc-duration, 650ms) var(--fc-easing);
+  pointer-events: none;
+}
+
+.fc-card--open .fc-folder {
+  height: var(--fc-folder-open-h, 50%);
+}
+
+/* Folder body (lower edge of the tab) */
+.fc-body {
+  position: absolute;
+  top: var(--fc-tab-h, 16px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--fc-folder-color, #02002f);
+  border-radius: 0 var(--fc-folder-radius, 16px) 0 0;
+}
+
+/* Folder tab, raised above the body */
+.fc-tab {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--fc-tab-w, 36%);
+  height: calc(var(--fc-tab-h, 16px) + 24px); /* overlaps the body: no seam */
+  background: var(--fc-folder-color, #02002f);
+  border-radius: var(--fc-folder-radius, 16px) calc(var(--fc-tab-h, 16px) / 2) 0 0;
+}
+
+/* Concave fillet where the tab meets the body line */
+.fc-tab::after {
+  content: "";
+  position: absolute;
+  left: calc(100% - 0.5px);
+  top: calc(var(--fc-tab-h, 16px) - var(--fc-fillet));
+  width: var(--fc-fillet);
+  height: var(--fc-fillet);
+  background: radial-gradient(
+    circle at 100% 0,
+    transparent calc(var(--fc-fillet) - 0.5px),
+    var(--fc-folder-color, #02002f) var(--fc-fillet)
+  );
+}
+
+/* Text on the folder (moves with the folder top / bottom) */
+.fc-label {
+  position: absolute;
+  top: calc(var(--fc-pad) * 0.6);
+  left: var(--fc-pad);
+  font-size: 2.25rem;
+  font-size: clamp(1.75rem, 15cqw, 3.5rem);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--fc-label-color, #fff);
+}
+
+.fc-arrow {
+  position: absolute;
+  top: calc(var(--fc-tab-h, 16px) + var(--fc-pad) * 0.7);
+  right: var(--fc-pad);
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--fc-arrow-color, rgba(255, 255, 255, 0.85));
+  transition: transform var(--fc-duration, 650ms) var(--fc-easing);
+}
+
+.fc-card--open .fc-arrow {
+  transform: translate(2px, -2px);
+}
+
+.fc-text {
+  position: absolute;
+  left: var(--fc-pad);
+  right: var(--fc-pad);
+  bottom: var(--fc-pad);
+  min-width: 0;
+}
+
+.fc-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-size: clamp(0.8125rem, 5.6cqw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  color: var(--fc-title-color, #fff);
+}
+
+.fc-description {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  font-size: clamp(0.6875rem, 4.4cqw, 0.875rem);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  color: var(--fc-desc-color, rgba(255, 255, 255, 0.6));
+}
+
+/* Reduced motion: the card still opens, but instantly. */
+@media (prefers-reduced-motion: reduce) {
+  .fc-stage,
+  .fc-media,
+  .fc-image,
+  .fc-folder,
+  .fc-arrow {
+    transition-duration: 0.01ms !important;
+  }
+
+  .fc-card--open .fc-arrow {
+    transform: none;
+  }
+}

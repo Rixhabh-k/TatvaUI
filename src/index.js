@@ -31,3 +31,4 @@ export {default as NeoBrutalism } from "./components/cards/NeoBrutalism.jsx"
 export { default as CircleExpand } from "./components/cards/CircleExpand.jsx";
 export { default as SideRevealCard } from "./components/cards/SideRevealCard.jsx";
 export { default as PixelHover } from "./components/cards/PixelHover.jsx";
+export { default as FolderCard } from "./components/cards/FolderCard.jsx";
