@@ -20,14 +20,15 @@ export { default as TextScramble } from "./components/texts/TextScramble.jsx";
 export { default as ShadowText } from "./components/texts/ShadowText.jsx";
 export { default as WaveText } from "./components/texts/WaveText.jsx";
 export { default as MagicText } from "./components/texts/MagicText.jsx";
+export { default as ScatterText } from "./components/texts/ScatterText.jsx"
 
 //cards animations imports
-export {default as ThreeDCard } from "./components/cards/ThreeDCard.jsx"
-export {default as GliterCard } from "./components/cards/GlitterCard.jsx"
-export {default as PixelCard } from "./components/cards/PixelCard.jsx"
-export {default as AnimatedBorderCard } from "./components/cards/AnimatedBorderCard.jsx"
-export {default as ShowCard } from "./components/cards/ShowCard.jsx"
-export {default as NeoBrutalism } from "./components/cards/NeoBrutalism.jsx"
+export { default as ThreeDCard } from "./components/cards/ThreeDCard.jsx"
+export { default as GliterCard } from "./components/cards/GlitterCard.jsx"
+export { default as PixelCard } from "./components/cards/PixelCard.jsx"
+export { default as AnimatedBorderCard } from "./components/cards/AnimatedBorderCard.jsx"
+export { default as ShowCard } from "./components/cards/ShowCard.jsx"
+export { default as NeoBrutalism } from "./components/cards/NeoBrutalism.jsx"
 export { default as CircleExpand } from "./components/cards/CircleExpand.jsx";
 export { default as SideRevealCard } from "./components/cards/SideRevealCard.jsx";
 export { default as PixelHover } from "./components/cards/PixelHover.jsx";
