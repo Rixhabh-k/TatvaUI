@@ -1,4 +1,4 @@
-.velmora-scatter-loading {
+.tatva-scatter-loading {
   position: relative;
   display: inline-block;
   line-height: 1.2;
@@ -9,13 +9,13 @@
 }
 
 /* Invisible copy of the text: defines the layout box. */
-.velmora-scatter-loading__text {
+.tatva-scatter-loading__text {
   visibility: hidden;
 }
 
 /* The canvas is taller than the text (it holds the scattered streaks),
    so it is centred on the text and takes up no layout space. */
-.velmora-scatter-loading__canvas {
+.tatva-scatter-loading__canvas {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -25,7 +25,7 @@
 }
 
 /* Screen-reader-only label */
-.velmora-scatter-loading__sr {
+.tatva-scatter-loading__sr {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -39,10 +39,10 @@
 
 /* No animation: just show the word. */
 @media (prefers-reduced-motion: reduce) {
-  .velmora-scatter-loading__text {
+  .tatva-scatter-loading__text {
     visibility: visible;
   }
-  .velmora-scatter-loading__canvas {
+  .tatva-scatter-loading__canvas {
     display: none;
   }
 }
