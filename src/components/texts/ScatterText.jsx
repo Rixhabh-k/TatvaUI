@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import "../../styles/texts/scatterLoading.css";
+import "../../styles/texts/scatterText.css";
 
 
 const PERIOD = 3.33; // one full loop, seconds (at speed = 1)
@@ -286,19 +286,19 @@ function ScatterText({
     <span
       {...props}
       ref={wrapRef}
-      className={`velmora-scatter-loading ${className}`.trim()}
+      className={`tatva-scatter-loading ${className}`.trim()}
       style={{ fontSize: size, fontFamily, fontWeight, color, ...style }}>
-      <span className="velmora-scatter-loading__sr" role="status">
+      <span className="tatva-scatter-loading__sr" role="status">
         {text}
       </span>
       {/* plain text: shown until the canvas has painted (and kept if it can't run);
           it also gives the component its layout box */}
-      <span className="velmora-scatter-loading__text" aria-hidden="true">
+      <span className="tatva-scatter-loading__text" aria-hidden="true">
         {text}
       </span>
       <canvas
         ref={canvasRef}
-        className="velmora-scatter-loading__canvas"
+        className="tatva-scatter-loading__canvas"
         aria-hidden="true"
       />
     </span>
