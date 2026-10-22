@@ -1,0 +1,202 @@
+/* Tattva UI — LiquidGlassButton
+   Liquid-glass button designed for light backgrounds.
+
+   .lgb       <button> root. Must have NO filter/opacity, otherwise the glass
+              could not see (and blur) whatever is behind the button.
+   .lgb-move  Wrapper that lifts on hover / shrinks on press.
+   .lgb-glass Backdrop layer: refracts (Chromium) or blurs (other browsers) the
+              page behind the button. Tune the fallback with --lgb-blur and
+              --lgb-saturate in your own CSS.
+   .lgb-fx    Plays the role of the original ".fx-layer": contrast(3) here
+              gives the edges their crisp liquid look. It only affects the
+              button's own highlights, never the background.
+   .lgb-box   Glass body with highlights (the original ".box.start-btn").
+   .lgb-ring  Thin inner ring (the original ".circle-overlay").
+   .lgb-text  Label.
+
+   Size comes from the text and padding, not fixed --w/--h. */
+
+.lgb {
+  --lgb-padding: 22px 64px;
+  --lgb-radius: 9999px;
+  --lgb-tr: 15%; /* size of the white corner glows */
+  --lgb-blur: 6px; /* blur of the background seen through the glass */
+  --lgb-saturate: 1.5; /* color boost of the background seen through the glass */
+
+  position: relative;
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lgb:focus {
+  outline: none;
+}
+
+.lgb:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 6px;
+  border-radius: var(--lgb-radius);
+}
+
+.lgb:disabled {
+  cursor: not-allowed;
+}
+
+/* Disabled dims the layers, not the root (root opacity would hide the backdrop). */
+.lgb:disabled .lgb-glass,
+.lgb:disabled .lgb-fx {
+  opacity: 0.5;
+}
+
+/* Lift / press wrapper */
+.lgb-move {
+  position: relative;
+  display: flex;
+  border-radius: var(--lgb-radius);
+  transition: transform 0.25s;
+}
+
+/* Backdrop layer: shows the background through the button.
+   - Chromium: the component sets --lgb-backdrop to an SVG displacement filter, which
+     bends the background near the rim like the edge of a water drop.
+   - Other browsers: frosted blur fallback (the lines below).
+   The prefixed line comes first so modern browsers use the unprefixed one. */
+.lgb-glass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(var(--lgb-blur)) saturate(var(--lgb-saturate)) brightness(1.04);
+  backdrop-filter: var(
+    --lgb-backdrop,
+    blur(var(--lgb-blur)) saturate(var(--lgb-saturate)) brightness(1.04)
+  );
+  pointer-events: none;
+}
+
+/* Inline SVG that holds the refraction filter (must stay rendered, not display:none) */
+.lgb-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Highlight layer (original .fx-layer) */
+.lgb-fx {
+  position: relative;
+  display: flex;
+  border-radius: var(--lgb-radius);
+  filter: contrast(3);
+}
+
+/* Glass body */
+.lgb-box {
+  z-index: 500;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: var(--lgb-padding);
+  border-radius: var(--lgb-radius);
+  border: 1px double rgba(51, 51, 51, 0.08);
+  box-shadow:
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset 6px -6px 1px -6px rgba(255, 255, 255, 0.55),
+    inset -6px 6px 1px -6px rgba(255, 255, 255, 0.55),
+    inset 0 0 2px rgba(0, 0, 0, 0.8),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.02);
+  filter: brightness(0.9);
+  transition: 0.25s;
+}
+
+/* Soft dark shade under the label */
+.lgb-box::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 35%;
+  left: 8px;
+  right: 8px;
+  height: calc(100% - 16px);
+  border-radius: max(0px, calc(var(--lgb-radius) - 8px));
+  border: 1px solid rgba(0, 0, 0, 0.9);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+/* White corner glows */
+.lgb-box::after {
+  content: "";
+  position: absolute;
+  z-index: 501;
+  inset: 0;
+  border-radius: inherit;
+  filter: blur(7px);
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    transparent var(--lgb-tr),
+    transparent calc(100% - var(--lgb-tr)),
+    rgba(255, 255, 255, 0.8) 100%
+  );
+  pointer-events: none;
+}
+
+/* Thin inner ring */
+.lgb-ring {
+  position: absolute;
+  inset: 4.5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: max(0px, calc(var(--lgb-radius) - 4.5px));
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+/* Label (the drop-shadow makes the faint reflection under the text) */
+.lgb-text {
+  font-size: 25px;
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: normal;
+  white-space: nowrap;
+  color: #3e3e3e;
+  filter: drop-shadow(0 25px 3px rgba(102, 102, 102, 0.15));
+  transition: color 0.25s;
+}
+
+/* States */
+.lgb:hover:not(:disabled) .lgb-move {
+  transform: translateY(-3px);
+}
+
+.lgb:hover:not(:disabled) .lgb-box {
+  background: rgba(0, 0, 0, 0);
+}
+
+.lgb:active:not(:disabled) .lgb-move {
+  transform: scale(0.94);
+}
+
+.lgb:active:not(:disabled) .lgb-text {
+  color: #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lgb-move,
+  .lgb-box,
+  .lgb-text {
+    transition: none;
+  }
+}
