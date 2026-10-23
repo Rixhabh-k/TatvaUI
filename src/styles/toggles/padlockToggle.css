@@ -1,0 +1,197 @@
+/*
+  Tattva PadlockToggle
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-lock-size     height of the lock; everything is measured in em from it
+    --tattva-lock-locked   body colour when locked
+    --tattva-lock-open     body colour when open
+    --tattva-lock-metal    colour of the shackle
+*/
+
+:where(.tattva-lock) {
+  --tattva-lock-size: 90px;
+  --tattva-lock-locked: #4f6bff;
+  --tattva-lock-open: #ffb020;
+  --tattva-lock-metal: #b9c0cb;
+}
+
+.tattva-lock {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 0.76em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--tattva-lock-size);
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-lock:focus-visible {
+  outline: 0.025em solid #3b82f6;
+  outline-offset: 0.04em;
+  border-radius: 0.1em;
+}
+
+.tattva-lock:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Shackle: a metal U ---------- */
+.tattva-lock__shackle {
+  position: absolute;
+  top: 0.08em;
+  left: 50%;
+  width: 0.44em;
+  height: 0.46em;
+  margin-left: -0.22em;
+  box-sizing: border-box;
+  border: 0.075em solid var(--tattva-lock-metal);
+  border-bottom: 0;
+  border-radius: 0.22em 0.22em 0 0;
+  box-shadow:
+    inset 0.012em 0.012em 0 rgba(255, 255, 255, 0.5),
+    0.012em 0.012em 0 rgba(0, 0, 0, 0.18);
+  /* open: up, and swung out round its right leg */
+  transform: translateY(-0.1em) rotate(-14deg);
+  transform-origin: 100% 100%;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tattva-lock[data-state="on"] .tattva-lock__shackle {
+  transform: translateY(0.02em);
+  transition: transform 0.22s cubic-bezier(0.6, 0, 0.9, 0.6);
+}
+
+/* ---------- Body ---------- */
+.tattva-lock__body {
+  position: absolute;
+  left: 0.03em;
+  bottom: 0.03em;
+  width: 0.7em;
+  height: 0.56em;
+  border-radius: 0.11em;
+  background-color: var(--tattva-lock-open);
+  background-image:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0 18%, transparent 18% 32%, rgba(255, 255, 255, 0.12) 32% 40%, transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.18));
+  box-shadow:
+    inset 0 -0.02em 0.03em rgba(0, 0, 0, 0.22),
+    0 0.03em 0.06em rgba(0, 0, 0, 0.25);
+  transition: background-color 0.35s ease;
+}
+
+.tattva-lock[data-state="on"] .tattva-lock__body {
+  background-color: var(--tattva-lock-locked);
+}
+
+.tattva-lock[data-touched][data-state="on"] .tattva-lock__body {
+  animation: tattva-lock-thunk 0.35s ease 0.18s;
+}
+
+@keyframes tattva-lock-thunk {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(0.025em) scale(1.02, 0.97);
+  }
+}
+
+/* keyhole: a circle over a slot; it turns like a key went round */
+.tattva-lock__keyhole {
+  position: absolute;
+  top: 0.15em;
+  left: 50%;
+  width: 0.1em;
+  height: 0.22em;
+  margin-left: -0.05em;
+  transform: rotate(0deg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s;
+}
+
+.tattva-lock__keyhole::before,
+.tattva-lock__keyhole::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  background: rgba(20, 22, 40, 0.75);
+}
+
+.tattva-lock__keyhole::before {
+  top: 0;
+  width: 0.1em;
+  height: 0.1em;
+  margin-left: -0.05em;
+  border-radius: 50%;
+}
+
+.tattva-lock__keyhole::after {
+  top: 0.07em;
+  width: 0.04em;
+  height: 0.13em;
+  margin-left: -0.02em;
+  border-radius: 0 0 0.02em 0.02em;
+}
+
+.tattva-lock[data-state="on"] .tattva-lock__keyhole {
+  transform: rotate(90deg);
+}
+
+/* ---------- Sparkles when it locks ---------- */
+.tattva-lock__sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tattva-lock__sparkles i {
+  position: absolute;
+  width: 0.09em;
+  height: 0.09em;
+  background: #ffe066;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  opacity: 0;
+}
+
+.tattva-lock__sparkles i:nth-child(1) { top: 0.3em; left: -0.06em; }
+.tattva-lock__sparkles i:nth-child(2) { top: 0.08em; right: 0; }
+.tattva-lock__sparkles i:nth-child(3) { top: 0.56em; right: -0.08em; width: 0.07em; height: 0.07em; }
+.tattva-lock__sparkles i:nth-child(4) { top: 0.02em; left: 0.06em; width: 0.06em; height: 0.06em; }
+
+.tattva-lock[data-touched][data-state="on"] .tattva-lock__sparkles i {
+  animation: tattva-lock-sparkle 0.7s ease-out 0.2s;
+}
+
+.tattva-lock[data-touched][data-state="on"] .tattva-lock__sparkles i:nth-child(even) {
+  animation-delay: 0.3s;
+}
+
+@keyframes tattva-lock-sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.2) rotate(45deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4) rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-lock,
+  .tattva-lock * {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,251 @@
+/*
+  Tattva RecordPlayer
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-record-size    height of the turntable; everything is measured in em from it
+    --tattva-record-label   colour of the record's centre label
+    --tattva-record-note    colour of the floating notes
+    --tattva-record-wood    colour of the plinth
+*/
+
+:where(.tattva-record) {
+  --tattva-record-size: 100px;
+  --tattva-record-label: #ef5b3c;
+  --tattva-record-note: #ffcf5c;
+  --tattva-record-wood: #8a5a33;
+}
+
+.tattva-record {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 1.25em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--tattva-record-size);
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-record:focus-visible {
+  outline: 0.02em solid #3b82f6;
+  outline-offset: 0.03em;
+  border-radius: 0.09em;
+}
+
+.tattva-record:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tattva-record > span {
+  position: absolute;
+}
+
+/* ---------- Plinth: the wooden box ---------- */
+.tattva-record__plinth {
+  inset: 0;
+  border-radius: 0.08em;
+  background:
+    repeating-linear-gradient(100deg, rgba(0, 0, 0, 0.07) 0 0.01em, transparent 0.01em 0.05em),
+    linear-gradient(160deg, color-mix(in srgb, var(--tattva-record-wood) 80%, #fff), var(--tattva-record-wood) 45%, color-mix(in srgb, var(--tattva-record-wood) 70%, #000));
+  box-shadow:
+    inset 0 0.012em 0 rgba(255, 255, 255, 0.25),
+    inset 0 -0.02em 0.03em rgba(0, 0, 0, 0.3),
+    0 0.03em 0.08em rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- Record ---------- */
+.tattva-record__disc {
+  top: 0.09em;
+  left: 0.07em;
+  width: 0.82em;
+  height: 0.82em;
+  border-radius: 50%;
+  background: #111;
+  box-shadow:
+    0 0 0 0.018em #2b2b2b,
+    0 0.02em 0.05em rgba(0, 0, 0, 0.55);
+}
+
+/* the grooves and label turn; the light on them does not */
+.tattva-record__grooves {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 0.135em, transparent 0.135em),
+    repeating-radial-gradient(circle, #141414 0 0.007em, #222 0.007em 0.014em);
+  animation: tattva-record-spin 1.8s linear infinite paused;
+}
+
+/* the centre label, with a stripe so the spin can be seen */
+.tattva-record__grooves::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.27em;
+  height: 0.27em;
+  margin: -0.135em 0 0 -0.135em;
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent 0 46%, rgba(255, 255, 255, 0.85) 46% 54%, transparent 54%) 0 30% / 100% 18% no-repeat,
+    radial-gradient(circle, color-mix(in srgb, var(--tattva-record-label) 85%, #fff), var(--tattva-record-label) 70%);
+}
+
+/* the spindle */
+.tattva-record__grooves::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.03em;
+  height: 0.03em;
+  margin: -0.015em 0 0 -0.015em;
+  border-radius: 50%;
+  background: #d9dde3;
+}
+
+.tattva-record[data-state="on"] .tattva-record__grooves {
+  animation-play-state: running;
+}
+
+@keyframes tattva-record-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tattva-record__sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 20deg, transparent 0 8%, rgba(255, 255, 255, 0.12) 13%, transparent 20% 52%, rgba(255, 255, 255, 0.09) 60%, transparent 68%);
+  pointer-events: none;
+}
+
+/* ---------- Tonearm ---------- */
+.tattva-record__pivot {
+  top: 0.08em;
+  right: 0.07em;
+  width: 0.14em;
+  height: 0.14em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f3f5f8, #9aa1ab 60%, #6b717a);
+  box-shadow: 0 0.015em 0.03em rgba(0, 0, 0, 0.45);
+}
+
+/* the arm hangs from the pivot and swings in over the record */
+.tattva-record__arm {
+  top: 0.15em;
+  right: 0.14em;
+  width: 0;
+  height: 0;
+  transform: rotate(-4deg);
+  transform-origin: 0 0;
+  transition: transform 0.9s cubic-bezier(0.5, -0.3, 0.3, 1.25);
+}
+
+.tattva-record[data-state="on"] .tattva-record__arm {
+  transform: rotate(26deg);
+}
+
+.tattva-record__rod {
+  position: absolute;
+  top: 0;
+  left: -0.012em;
+  width: 0.024em;
+  height: 0.58em;
+  border-radius: 0.012em;
+  background: linear-gradient(90deg, #8f969f, #eef1f4 50%, #8f969f);
+  box-shadow: 0.012em 0.012em 0.02em rgba(0, 0, 0, 0.4);
+}
+
+.tattva-record__head {
+  position: absolute;
+  top: 0.55em;
+  left: -0.03em;
+  width: 0.06em;
+  height: 0.1em;
+  border-radius: 0.015em;
+  background: linear-gradient(90deg, #2a2a2e, #4a4a52);
+  transform: rotate(18deg);
+  transform-origin: 50% 0;
+}
+
+/* ---------- Power light ---------- */
+.tattva-record__led {
+  right: 0.07em;
+  bottom: 0.07em;
+  width: 0.035em;
+  height: 0.035em;
+  border-radius: 50%;
+  background: #3a2a22;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.tattva-record[data-state="on"] .tattva-record__led {
+  background: #7dff9a;
+  box-shadow: 0 0 0.04em #7dff9a;
+}
+
+/* ---------- Notes ---------- */
+.tattva-record__notes {
+  top: 0.1em;
+  left: 0.3em;
+  width: 0.4em;
+  height: 0.4em;
+  pointer-events: none;
+}
+
+.tattva-record__notes i {
+  position: absolute;
+  bottom: 0;
+  color: var(--tattva-record-note);
+  font-size: 0.16em;
+  font-style: normal;
+  line-height: 1;
+  text-shadow: 0 0.06em 0.1em rgba(0, 0, 0, 0.4);
+  opacity: 0;
+}
+
+.tattva-record__notes i:nth-child(1) { left: 0; }
+.tattva-record__notes i:nth-child(2) { left: 0.9em; font-size: 0.2em; }
+.tattva-record__notes i:nth-child(3) { left: 1.8em; }
+
+.tattva-record[data-state="on"] .tattva-record__notes i {
+  animation: tattva-record-note 2.4s ease-out infinite;
+}
+
+.tattva-record[data-state="on"] .tattva-record__notes i:nth-child(1) { animation-delay: 0.9s; }
+.tattva-record[data-state="on"] .tattva-record__notes i:nth-child(2) { animation-delay: 1.7s; }
+.tattva-record[data-state="on"] .tattva-record__notes i:nth-child(3) { animation-delay: 2.5s; }
+
+@keyframes tattva-record-note {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(-10deg) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0.6em, -2.2em) rotate(14deg) scale(1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-record,
+  .tattva-record * {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}

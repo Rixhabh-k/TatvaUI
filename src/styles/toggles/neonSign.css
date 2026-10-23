@@ -1,0 +1,181 @@
+/*
+  Tattva NeonSign
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-neon-size     height of the sign; everything is measured in em from it
+    --tattva-neon-text     colour of the lettering
+    --tattva-neon-border   colour of the border tube
+    --tattva-neon-wall     colour of the brick wall
+*/
+
+:where(.tattva-neon) {
+  --tattva-neon-size: 80px;
+  --tattva-neon-text: #ff3fa4;
+  --tattva-neon-border: #3df2ff;
+  --tattva-neon-wall: #2b1c1e;
+}
+
+/* the button is the wall the sign hangs on */
+.tattva-neon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  width: 1.9em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.1em;
+  font-size: var(--tattva-neon-size);
+  background-color: var(--tattva-neon-wall);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0 0.012em, transparent 0.012em 0.16em),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0 0.012em, transparent 0.012em 0.34em),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.25));
+  box-shadow:
+    inset 0 0 0.12em rgba(0, 0, 0, 0.6),
+    0 0.03em 0.08em rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* the pink light the letters throw on the bricks */
+.tattva-neon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--tattva-neon-text) 30%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.6s ease 0.4s;
+}
+
+.tattva-neon[data-state="on"]::before {
+  opacity: 1;
+}
+
+.tattva-neon:focus-visible {
+  outline: 0.04em solid var(--tattva-neon-border);
+  outline-offset: 0.04em;
+}
+
+.tattva-neon:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tattva-neon__svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* ---------- Bare glass ---------- */
+.tattva-neon__glass rect,
+.tattva-neon__glass path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tattva-neon__glass rect {
+  stroke-width: 3.5;
+}
+
+/* ---------- Lit tubes ---------- */
+.tattva-neon__tube {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.tattva-neon__letter {
+  stroke: color-mix(in srgb, var(--tattva-neon-text) 55%, #fff);
+  stroke-width: 4;
+  filter: drop-shadow(0 0 2px var(--tattva-neon-text)) drop-shadow(0 0 6px var(--tattva-neon-text)) drop-shadow(0 0 14px var(--tattva-neon-text));
+}
+
+.tattva-neon__frame {
+  stroke: color-mix(in srgb, var(--tattva-neon-border) 55%, #fff);
+  stroke-width: 2.6;
+  filter: drop-shadow(0 0 2px var(--tattva-neon-border)) drop-shadow(0 0 7px var(--tattva-neon-border));
+}
+
+.tattva-neon[data-state="on"] .tattva-neon__tube {
+  opacity: 1;
+}
+
+/* the tubes stutter to life, each letter on its own timing */
+.tattva-neon[data-touched][data-state="on"] .tattva-neon__letter {
+  animation: tattva-neon-strike 0.9s steps(1, end) calc(var(--i) * 0.14s) both;
+}
+
+.tattva-neon[data-touched][data-state="on"] .tattva-neon__frame {
+  animation: tattva-neon-strike 0.9s steps(1, end) 0.5s both;
+}
+
+/* then the E keeps the slightly faulty buzz of a real sign */
+.tattva-neon[data-state="on"] .tattva-neon__letter:nth-of-type(3) {
+  animation:
+    tattva-neon-strike 0.9s steps(1, end) 0.42s both,
+    tattva-neon-buzz 5s steps(1, end) 2s infinite;
+}
+
+@keyframes tattva-neon-strike {
+  0% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.15;
+  }
+  34% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.3;
+  }
+  58%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tattva-neon-buzz {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  91% {
+    opacity: 0.4;
+  }
+  92% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 0.55;
+  }
+  95% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-neon,
+  .tattva-neon *,
+  .tattva-neon::before {
+    transition-duration: 0.01s !important;
+    transition-delay: 0s !important;
+    animation: none !important;
+  }
+}
