@@ -1,0 +1,311 @@
+.tatva-glitch {
+    --tatva-glitch-a: #00e5ff;
+    --tatva-glitch-b: #ff2e93;
+    --tatva-glitch-shift: 0.06em;
+    --tatva-glitch-duration: 3.2s;
+
+    position: relative;
+    display: inline-block;
+}
+
+.tatva-glitch__text {
+    display: inline-block;
+    color: white;
+    font-size: larger;
+}
+
+/* Two coloured copies of the text, normally clipped away entirely. */
+.tatva-glitch::before,
+.tatva-glitch::after {
+    content: attr(data-text);
+    content: attr(data-text) / "";
+    /* empty alt text: screen readers skip the copies */
+    position: absolute;
+    inset: 0;
+    white-space: inherit;
+    pointer-events: none;
+    clip-path: inset(0 0 100% 0);
+}
+
+.tatva-glitch::before {
+    color: var(--tatva-glitch-a);
+}
+
+.tatva-glitch::after {
+    color: var(--tatva-glitch-b);
+}
+
+/* ── loop: short bursts, mostly quiet ───────────────────────────── */
+.tatva-glitch--loop::before {
+    animation: tatva-glitch-a var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+.tatva-glitch--loop::after {
+    animation: tatva-glitch-b var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+.tatva-glitch--loop .tatva-glitch__text {
+    animation: tatva-glitch-jolt var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+/* ── always: continuous ─────────────────────────────────────────── */
+.tatva-glitch--always::before {
+    animation: tatva-glitch-a-live var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+.tatva-glitch--always::after {
+    animation: tatva-glitch-b-live var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+.tatva-glitch--always .tatva-glitch__text {
+    animation: tatva-glitch-jolt-live var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+/* ── hover: continuous, only while hovered ──────────────────────── */
+.tatva-glitch--hover:hover::before,
+.tatva-glitch--hover:focus-visible::before {
+    animation: tatva-glitch-a-live var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+.tatva-glitch--hover:hover::after,
+.tatva-glitch--hover:focus-visible::after {
+    animation: tatva-glitch-b-live var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+.tatva-glitch--hover:hover .tatva-glitch__text,
+.tatva-glitch--hover:focus-visible .tatva-glitch__text {
+    animation: tatva-glitch-jolt-live var(--tatva-glitch-duration) steps(1, end) infinite;
+}
+
+/* ── keyframes: burst (quiet until ~82%) ────────────────────────── */
+@keyframes tatva-glitch-a {
+
+    0%,
+    82%,
+    96%,
+    100% {
+        clip-path: inset(0 0 100% 0);
+        transform: none;
+    }
+
+    83% {
+        clip-path: inset(12% 0 62% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1), 0);
+    }
+
+    85% {
+        clip-path: inset(58% 0 14% 0);
+        transform: translate(var(--tatva-glitch-shift), 0);
+    }
+
+    87% {
+        clip-path: inset(30% 0 44% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1.5), 0);
+    }
+
+    89% {
+        clip-path: inset(72% 0 6% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * 0.8), 0);
+    }
+
+    91% {
+        clip-path: inset(4% 0 80% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1), 0);
+    }
+
+    93% {
+        clip-path: inset(44% 0 30% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * 1.3), 0);
+    }
+}
+
+@keyframes tatva-glitch-b {
+
+    0%,
+    83%,
+    97%,
+    100% {
+        clip-path: inset(0 0 100% 0);
+        transform: none;
+    }
+
+    84% {
+        clip-path: inset(66% 0 10% 0);
+        transform: translate(var(--tatva-glitch-shift), 0);
+    }
+
+    86% {
+        clip-path: inset(20% 0 56% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1.2), 0);
+    }
+
+    88% {
+        clip-path: inset(50% 0 28% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * 1.5), 0);
+    }
+
+    90% {
+        clip-path: inset(8% 0 74% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -0.8), 0);
+    }
+
+    92% {
+        clip-path: inset(78% 0 2% 0);
+        transform: translate(var(--tatva-glitch-shift), 0);
+    }
+
+    94% {
+        clip-path: inset(36% 0 40% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1.4), 0);
+    }
+}
+
+@keyframes tatva-glitch-jolt {
+
+    0%,
+    82%,
+    96%,
+    100% {
+        transform: none;
+    }
+
+    83% {
+        transform: translate(calc(var(--tatva-glitch-shift) * 0.5), 0) skewX(-4deg);
+    }
+
+    86% {
+        transform: translate(calc(var(--tatva-glitch-shift) * -0.5), 0.02em);
+    }
+
+    90% {
+        transform: translate(calc(var(--tatva-glitch-shift) * 0.3), -0.02em) skewX(3deg);
+    }
+
+    93% {
+        transform: translate(calc(var(--tatva-glitch-shift) * -0.3), 0);
+    }
+}
+
+/* ── keyframes: continuous ──────────────────────────────────────── */
+@keyframes tatva-glitch-a-live {
+    0% {
+        clip-path: inset(10% 0 70% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1), 0);
+    }
+
+    12% {
+        clip-path: inset(55% 0 22% 0);
+        transform: translate(var(--tatva-glitch-shift), 0);
+    }
+
+    24% {
+        clip-path: inset(28% 0 48% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1.5), 0);
+    }
+
+    36% {
+        clip-path: inset(76% 0 4% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * 0.8), 0);
+    }
+
+    48% {
+        clip-path: inset(2% 0 84% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1), 0);
+    }
+
+    60% {
+        clip-path: inset(42% 0 34% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * 1.3), 0);
+    }
+
+    72% {
+        clip-path: inset(64% 0 16% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -0.7), 0);
+    }
+
+    84% {
+        clip-path: inset(18% 0 60% 0);
+        transform: translate(var(--tatva-glitch-shift), 0);
+    }
+
+    92% {
+        clip-path: inset(0 0 100% 0);
+        transform: none;
+    }
+}
+
+@keyframes tatva-glitch-b-live {
+    0% {
+        clip-path: inset(62% 0 14% 0);
+        transform: translate(var(--tatva-glitch-shift), 0);
+    }
+
+    10% {
+        clip-path: inset(18% 0 58% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1.2), 0);
+    }
+
+    22% {
+        clip-path: inset(48% 0 30% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * 1.5), 0);
+    }
+
+    34% {
+        clip-path: inset(6% 0 76% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -0.8), 0);
+    }
+
+    46% {
+        clip-path: inset(80% 0 2% 0);
+        transform: translate(var(--tatva-glitch-shift), 0);
+    }
+
+    58% {
+        clip-path: inset(34% 0 42% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1.4), 0);
+    }
+
+    70% {
+        clip-path: inset(52% 0 24% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * 0.9), 0);
+    }
+
+    82% {
+        clip-path: inset(70% 0 8% 0);
+        transform: translate(calc(var(--tatva-glitch-shift) * -1), 0);
+    }
+
+    94% {
+        clip-path: inset(0 0 100% 0);
+        transform: none;
+    }
+}
+
+@keyframes tatva-glitch-jolt-live {
+
+    0%,
+    100% {
+        transform: none;
+    }
+
+    20% {
+        transform: translate(calc(var(--tatva-glitch-shift) * 0.4), 0) skewX(-3deg);
+    }
+
+    45% {
+        transform: translate(calc(var(--tatva-glitch-shift) * -0.4), 0.02em);
+    }
+
+    70% {
+        transform: translate(calc(var(--tatva-glitch-shift) * 0.3), -0.02em) skewX(2deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .tatva-glitch::before,
+    .tatva-glitch::after,
+    .tatva-glitch .tatva-glitch__text {
+        animation: none !important;
+    }
+}
