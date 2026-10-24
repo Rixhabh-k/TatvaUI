@@ -1,0 +1,191 @@
+/*
+  Tattva MoodToggle
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-mood-size    height of the toggle; everything is measured in em from it
+    --tattva-mood-off     track colour when off (sad)
+    --tattva-mood-on      track colour when on (happy)
+    --tattva-mood-face    colour of the face
+    --tattva-mood-ink     eyes and mouth
+    --tattva-mood-speed   how long the roll takes
+*/
+
+/* ---------- Customizable defaults (zero specificity) ---------- */
+:where(.tattva-mood) {
+  --tattva-mood-size: 40px;
+  --tattva-mood-off: #a9b4cf;
+  --tattva-mood-on: #6fdc9f;
+  --tattva-mood-face: #ffd84d;
+  --tattva-mood-ink: #3b2a12;
+  --tattva-mood-speed: 0.6s;
+}
+
+/* ---------- Track ---------- */
+.tattva-mood {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  box-sizing: border-box;
+  width: 2.2em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.5em;
+  font-size: var(--tattva-mood-size);
+  background: var(--tattva-mood-off);
+  box-shadow: inset 0 0.05em 0.1em rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  vertical-align: middle;
+  transition: background-color var(--tattva-mood-speed) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-mood[data-state="on"] {
+  background: var(--tattva-mood-on);
+}
+
+.tattva-mood:focus-visible {
+  outline: 0.06em solid #3b82f6;
+  outline-offset: 0.08em;
+}
+
+.tattva-mood:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Face: rolls along the track ---------- */
+.tattva-mood__face {
+  position: absolute;
+  top: 0.1em;
+  left: 0.1em;
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3b8 0%, var(--tattva-mood-face) 45%, #f2b928 100%);
+  box-shadow: 0 0.04em 0.1em rgba(0, 0, 0, 0.25);
+  transition: transform var(--tattva-mood-speed) cubic-bezier(0.5, -0.2, 0.3, 1.3);
+}
+
+/* one full turn on the way, so it reads as rolling and lands upright */
+.tattva-mood[data-state="on"] .tattva-mood__face {
+  transform: translateX(1.2em) rotate(360deg);
+}
+
+.tattva-mood__eye {
+  position: absolute;
+  top: 0.26em;
+  width: 0.09em;
+  height: 0.13em;
+  border-radius: 50%;
+  background: var(--tattva-mood-ink);
+}
+
+.tattva-mood__eye--left {
+  left: 0.23em;
+}
+
+.tattva-mood__eye--right {
+  right: 0.23em;
+}
+
+/* a blink on every flip; the two names make each change restart it */
+.tattva-mood[data-touched][data-state="on"] .tattva-mood__eye {
+  animation: tattva-mood-blink-a 0.45s ease calc(var(--tattva-mood-speed) * 0.7);
+}
+
+.tattva-mood[data-touched][data-state="off"] .tattva-mood__eye {
+  animation: tattva-mood-blink-b 0.45s ease calc(var(--tattva-mood-speed) * 0.7);
+}
+
+@keyframes tattva-mood-blink-a {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  40% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes tattva-mood-blink-b {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  40% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* the mouth is one curve: a smile, flipped upside down for a frown */
+.tattva-mood__mouth {
+  position: absolute;
+  left: 50%;
+  bottom: 0.17em;
+  width: 0.32em;
+  height: 0.15em;
+  margin-left: -0.16em;
+  box-sizing: border-box;
+  border: 0.05em solid var(--tattva-mood-ink);
+  border-top-color: transparent;
+  border-radius: 0 0 0.16em 0.16em;
+  transform: translateY(0.05em) scaleY(-1);
+  transition: transform var(--tattva-mood-speed) ease;
+}
+
+.tattva-mood[data-state="on"] .tattva-mood__mouth {
+  transform: none;
+}
+
+.tattva-mood__cheek {
+  position: absolute;
+  top: 0.44em;
+  width: 0.13em;
+  height: 0.08em;
+  border-radius: 50%;
+  background: rgba(255, 110, 110, 0.55);
+  opacity: 0;
+  transition: opacity var(--tattva-mood-speed) ease;
+}
+
+.tattva-mood__cheek--left {
+  left: 0.1em;
+}
+
+.tattva-mood__cheek--right {
+  right: 0.1em;
+}
+
+.tattva-mood[data-state="on"] .tattva-mood__cheek {
+  opacity: 1;
+}
+
+/* a teardrop under the left eye while sad */
+.tattva-mood__tear {
+  position: absolute;
+  top: 0.4em;
+  left: 0.2em;
+  width: 0.08em;
+  height: 0.11em;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: #5bb8ff;
+  opacity: 0.9;
+  transition:
+    opacity 0.25s ease,
+    transform var(--tattva-mood-speed) ease;
+}
+
+.tattva-mood[data-state="on"] .tattva-mood__tear {
+  opacity: 0;
+  transform: translateY(0.12em) scale(0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-mood,
+  .tattva-mood * {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}

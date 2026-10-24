@@ -1,0 +1,158 @@
+/*
+  Tattva EyeToggle
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-eye-size   height of the toggle; everything is measured in em from it
+    --tattva-eye-iris   colour of the iris
+    --tattva-eye-ink    colour of the lids and lashes
+    --tattva-eye-bg     the pad behind the eye
+*/
+
+:where(.tattva-eye) {
+  --tattva-eye-size: 40px;
+  --tattva-eye-iris: #3d8bff;
+  --tattva-eye-ink: #23243a;
+  --tattva-eye-bg: #eef1fb;
+}
+
+.tattva-eye {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.5em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.3em;
+  font-size: var(--tattva-eye-size);
+  background: var(--tattva-eye-bg);
+  box-shadow:
+    inset 0 0 0 0.025em rgba(35, 36, 58, 0.08),
+    0 0.03em 0.08em rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  vertical-align: middle;
+  transition: background-color 0.35s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-eye[data-state="on"] {
+  background: color-mix(in srgb, var(--tattva-eye-iris) 14%, var(--tattva-eye-bg));
+}
+
+.tattva-eye:focus-visible {
+  outline: 0.06em solid var(--tattva-eye-iris);
+  outline-offset: 0.06em;
+}
+
+.tattva-eye:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tattva-eye__svg {
+  display: block;
+  width: 1.3em;
+  height: auto;
+  overflow: visible;
+}
+
+/* every part pivots round the middle of the eye */
+.tattva-eye__blink,
+.tattva-eye__ball,
+.tattva-eye__lid {
+  transform-origin: 30px 20px;
+}
+
+.tattva-eye__white {
+  fill: #ffffff;
+}
+
+.tattva-eye__iris {
+  transform: translate(calc(var(--tattva-eye-x, 0) * 1px), calc(var(--tattva-eye-y, 0) * 1px));
+  transition: transform 0.12s ease-out;
+}
+
+.tattva-eye__iris-ring {
+  fill: color-mix(in srgb, var(--tattva-eye-iris) 70%, #000);
+}
+
+.tattva-eye__iris-fill {
+  fill: var(--tattva-eye-iris);
+}
+
+.tattva-eye__pupil {
+  fill: #101118;
+}
+
+.tattva-eye__glint {
+  fill: #ffffff;
+}
+
+.tattva-eye__line,
+.tattva-eye__lashes {
+  fill: none;
+  stroke: var(--tattva-eye-ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tattva-eye__line {
+  stroke-width: 2.6;
+}
+
+.tattva-eye__lashes {
+  stroke-width: 2.2;
+}
+
+/* ---------- Closed: the eyeball folds away and the upper lid flips
+   down onto the lower one, its lashes now pointing down ---------- */
+.tattva-eye__ball {
+  transform: scaleY(0.04);
+  transition: transform 0.32s cubic-bezier(0.5, 0, 0.2, 1);
+}
+
+.tattva-eye__lid {
+  transform: scaleY(-1);
+  transition: transform 0.32s cubic-bezier(0.5, 0, 0.2, 1);
+}
+
+.tattva-eye__lower {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tattva-eye[data-state="on"] .tattva-eye__ball,
+.tattva-eye[data-state="on"] .tattva-eye__lid {
+  transform: none;
+  transition-timing-function: cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.tattva-eye[data-state="on"] .tattva-eye__lower {
+  opacity: 1;
+}
+
+/* open, it blinks every few seconds */
+.tattva-eye[data-state="on"] .tattva-eye__blink {
+  animation: tattva-eye-blink 4.6s ease-in-out 1.2s infinite;
+}
+
+@keyframes tattva-eye-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-eye,
+  .tattva-eye * {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,212 @@
+/*
+  Tattva FlowerBloom
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-bloom-size    height of the plant; everything is measured in em from it
+    --tattva-bloom-petal   colour of the petals
+    --tattva-bloom-pot     colour of the pot
+    --tattva-bloom-leaf    colour of the stem and leaves
+*/
+
+:where(.tattva-bloom) {
+  --tattva-bloom-size: 120px;
+  --tattva-bloom-petal: #ff6fae;
+  --tattva-bloom-pot: #d9774a;
+  --tattva-bloom-leaf: #4fb36a;
+  --tattva-bloom-speed: 0.7s;
+}
+
+.tattva-bloom {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 0.7em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--tattva-bloom-size);
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-bloom:focus-visible {
+  outline: 0.02em solid #3b82f6;
+  outline-offset: 0.03em;
+  border-radius: 0.08em;
+}
+
+.tattva-bloom:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Pot ---------- */
+.tattva-bloom__pot {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0.36em;
+  height: 0.26em;
+  margin-left: -0.18em;
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--tattva-bloom-pot) 80%, #fff) 0 0.05em, rgba(0, 0, 0, 0.18) 0.05em 0.062em, transparent 0.062em),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(255, 255, 255, 0.22) 35%, rgba(0, 0, 0, 0.14)),
+    var(--tattva-bloom-pot);
+}
+
+/* ---------- Stem: droops while it is a bud ---------- */
+.tattva-bloom__stem {
+  position: absolute;
+  left: 50%;
+  bottom: 0.22em;
+  width: 0.024em;
+  height: 0.48em;
+  margin-left: -0.012em;
+  border-radius: 0.012em;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--tattva-bloom-leaf) 70%, #000), var(--tattva-bloom-leaf));
+  transform: rotate(-16deg);
+  transform-origin: 50% 100%;
+  transition: transform var(--tattva-bloom-speed) cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.tattva-bloom[data-state="on"] .tattva-bloom__stem {
+  transform: rotate(0deg);
+}
+
+.tattva-bloom__leaf {
+  position: absolute;
+  bottom: 0.1em;
+  width: 0.15em;
+  height: 0.07em;
+  border-radius: 0 100% 0 100%;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--tattva-bloom-leaf) 70%, #fff), var(--tattva-bloom-leaf));
+  transition: transform var(--tattva-bloom-speed) cubic-bezier(0.34, 1.4, 0.64, 1) 0.1s;
+}
+
+.tattva-bloom__leaf--left {
+  right: 50%;
+  border-radius: 100% 0 100% 0;
+  transform-origin: 100% 100%;
+  transform: rotate(60deg) scale(0.6);
+}
+
+.tattva-bloom__leaf--right {
+  left: 50%;
+  bottom: 0.18em;
+  transform-origin: 0 100%;
+  transform: rotate(-60deg) scale(0.6);
+}
+
+.tattva-bloom[data-state="on"] .tattva-bloom__leaf--left {
+  transform: rotate(-8deg);
+}
+
+.tattva-bloom[data-state="on"] .tattva-bloom__leaf--right {
+  transform: rotate(8deg);
+}
+
+/* ---------- Flower: petals fanned round a point ---------- */
+.tattva-bloom__flower {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.tattva-bloom__petal {
+  position: absolute;
+  left: -0.055em;
+  bottom: 0;
+  width: 0.11em;
+  height: 0.17em;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(ellipse at 50% 85%, color-mix(in srgb, var(--tattva-bloom-petal) 70%, #7a0035), var(--tattva-bloom-petal) 45%, color-mix(in srgb, var(--tattva-bloom-petal) 55%, #fff));
+  box-shadow: inset 0 0 0.01em rgba(0, 0, 0, 0.12);
+  transform-origin: 50% 100%;
+  /* a bud: every petal folded up into a point */
+  transform: rotate(calc((var(--i) - 3.5) * 5deg)) scale(0.7, 0.85);
+  transition: transform var(--tattva-bloom-speed) cubic-bezier(0.34, 1.4, 0.64, 1) calc(var(--i) * 0.04s);
+}
+
+.tattva-bloom[data-state="on"] .tattva-bloom__petal {
+  transform: rotate(var(--a)) scale(1);
+  transition-delay: calc(0.15s + var(--i) * 0.06s);
+}
+
+.tattva-bloom__heart {
+  position: absolute;
+  top: -0.055em;
+  left: -0.055em;
+  width: 0.11em;
+  height: 0.11em;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.6) 0 12%, transparent 13%),
+    radial-gradient(circle, #ffe169, #f2a51a);
+  box-shadow: 0 0 0 0.008em rgba(0, 0, 0, 0.12);
+  transform: scale(0);
+  transition: transform 0.4s cubic-bezier(0.34, 1.7, 0.64, 1) 0s;
+}
+
+.tattva-bloom[data-state="on"] .tattva-bloom__heart {
+  transform: scale(1);
+  transition-delay: 0.55s;
+}
+
+/* ---------- Pollen drifting up once it opens ---------- */
+.tattva-bloom__pollen {
+  position: absolute;
+  top: 0.04em;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.tattva-bloom__pollen i {
+  position: absolute;
+  width: 0.022em;
+  height: 0.022em;
+  border-radius: 50%;
+  background: #ffd84a;
+  box-shadow: 0 0 0.02em #ffe680;
+  opacity: 0;
+}
+
+.tattva-bloom[data-touched][data-state="on"] .tattva-bloom__pollen i {
+  animation: tattva-bloom-pollen 1.6s ease-out calc(0.8s + var(--n) * 0.1s) forwards;
+}
+
+.tattva-bloom__pollen i:nth-child(1) { --dx: -0.16em; --n: 0; }
+.tattva-bloom__pollen i:nth-child(2) { --dx: 0.12em; --n: 1; }
+.tattva-bloom__pollen i:nth-child(3) { --dx: -0.05em; --n: 2; }
+.tattva-bloom__pollen i:nth-child(4) { --dx: 0.18em; --n: 3; }
+.tattva-bloom__pollen i:nth-child(5) { --dx: 0.03em; --n: 4; }
+
+@keyframes tattva-bloom-pollen {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), -0.2em);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-bloom,
+  .tattva-bloom * {
+    transition-duration: 0.01s !important;
+    transition-delay: 0s !important;
+    animation: none !important;
+  }
+}
