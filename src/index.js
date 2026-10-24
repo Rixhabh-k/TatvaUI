@@ -21,6 +21,8 @@ export { default as ShadowText } from "./components/texts/ShadowText.jsx";
 export { default as WaveText } from "./components/texts/WaveText.jsx";
 export { default as MagicText } from "./components/texts/MagicText.jsx";
 export { default as ScatterText } from "./components/texts/ScatterText.jsx"
+export { default as GlitchText } from "./components/texts/GlitchText.jsx"
+export { default as CircularText } from "./components/texts/CircularText.jsx"
 
 //cards animations imports
 export { default as ThreeDCard } from "./components/cards/ThreeDCard.jsx"
