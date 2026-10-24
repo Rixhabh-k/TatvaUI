@@ -1,0 +1,192 @@
+/*
+  Tattva LavaLamp
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-lava-size     height of the lamp; everything is measured in em from it
+    --tattva-lava-wax      colour of the wax
+    --tattva-lava-liquid   colour of the glowing liquid
+    --tattva-lava-metal    colour of the cap and base
+*/
+
+:where(.tattva-lava) {
+  --tattva-lava-size: 130px;
+  --tattva-lava-wax: #ffcf3a;
+  --tattva-lava-liquid: #ff4f7b;
+  --tattva-lava-metal: #9aa3b0;
+}
+
+.tattva-lava {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 0.46em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--tattva-lava-size);
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-lava:focus-visible {
+  outline: 0.02em solid #3b82f6;
+  outline-offset: 0.04em;
+  border-radius: 0.06em;
+}
+
+.tattva-lava:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tattva-lava__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.tattva-lava > span {
+  position: absolute;
+  left: 50%;
+}
+
+/* ---------- Glow around the lamp ---------- */
+.tattva-lava__halo {
+  top: 0.06em;
+  width: 0.9em;
+  height: 0.75em;
+  margin-left: -0.45em;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--tattva-lava-liquid) 40%, transparent), transparent);
+  opacity: 0;
+  transition: opacity 1.4s ease;
+  pointer-events: none;
+}
+
+.tattva-lava[data-state="on"] .tattva-lava__halo {
+  opacity: 1;
+}
+
+/* ---------- Cap, glass, base ---------- */
+.tattva-lava__cap {
+  top: 0;
+  width: 0.15em;
+  height: 0.13em;
+  margin-left: -0.075em;
+  clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--tattva-lava-metal) 60%, #000), #eef1f5 45%, var(--tattva-lava-metal));
+}
+
+.tattva-lava__glass {
+  top: 0.12em;
+  width: 0.34em;
+  height: 0.56em;
+  margin-left: -0.17em;
+  overflow: hidden;
+  clip-path: polygon(28% 0, 72% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, #2b1830, #3e2040);
+  transition: background-color 1s ease;
+}
+
+/* the liquid lights up from below as the lamp warms */
+.tattva-lava__glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tattva-lava-liquid) 70%, #3a0b2a), var(--tattva-lava-liquid) 55%, color-mix(in srgb, var(--tattva-lava-liquid) 60%, #ffd0a0));
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.tattva-lava[data-state="on"] .tattva-lava__glass::before {
+  opacity: 1;
+}
+
+.tattva-lava__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 22%, rgba(255, 255, 255, 0.28) 30%, transparent 40%, transparent 70%, rgba(255, 255, 255, 0.1) 76%, transparent 82%);
+  pointer-events: none;
+}
+
+.tattva-lava__base {
+  bottom: 0;
+  width: 0.4em;
+  height: 0.33em;
+  margin-left: -0.2em;
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0 0.02em, transparent 0.02em),
+    linear-gradient(90deg, color-mix(in srgb, var(--tattva-lava-metal) 55%, #000), #eef1f5 42%, var(--tattva-lava-metal) 70%, color-mix(in srgb, var(--tattva-lava-metal) 60%, #000));
+}
+
+/* ---------- Wax ---------- */
+.tattva-lava__wax {
+  position: absolute;
+  inset: 0;
+}
+
+/* the cold heap at the bottom */
+.tattva-lava__pool {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -0.05em;
+  height: 0.1em;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tattva-lava-wax) 55%, #6b3a2a);
+  transition: background-color 1.2s ease;
+}
+
+.tattva-lava[data-state="on"] .tattva-lava__pool {
+  background: var(--tattva-lava-wax);
+}
+
+.tattva-lava__blob {
+  position: absolute;
+  left: var(--x);
+  bottom: 0.02em;
+  width: var(--s);
+  height: var(--s);
+  margin-left: calc(var(--s) / -2);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tattva-lava-wax) 55%, #6b3a2a);
+  transition: background-color 1.2s ease;
+  /* resting in the heap until the lamp warms; switched off, it sets where it is */
+  animation: tattva-lava-rise var(--t) ease-in-out var(--d) infinite paused;
+  transform: translateY(0);
+}
+
+.tattva-lava[data-state="on"] .tattva-lava__blob {
+  background: var(--tattva-lava-wax);
+  animation-play-state: running;
+}
+
+/* a blob rises, stretches as it goes, rounds out at the top and sinks */
+@keyframes tattva-lava-rise {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  25% {
+    transform: translateY(-0.18em) scale(0.9, 1.15);
+  }
+  50% {
+    transform: translateY(-0.46em) scale(1.08, 0.95);
+  }
+  75% {
+    transform: translateY(-0.22em) scale(0.95, 1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-lava,
+  .tattva-lava *,
+  .tattva-lava *::before {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,354 @@
+/*
+  Tattva SleepyCat
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-cat-size    height of the toggle; everything is measured in em from it
+    --tattva-cat-fur     colour of the cat
+    --tattva-cat-night   track colour while it sleeps
+    --tattva-cat-day     track colour while it is awake
+    --tattva-cat-speed   how long the slide takes
+*/
+
+:where(.tattva-cat) {
+  --tattva-cat-size: 44px;
+  --tattva-cat-fur: #f5a14a;
+  --tattva-cat-night: #8f86c9;
+  --tattva-cat-day: #ffd28a;
+  --tattva-cat-ink: #3a2414;
+  --tattva-cat-speed: 0.6s;
+}
+
+/* ---------- Track ---------- */
+.tattva-cat {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 2.3em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.5em;
+  font-size: var(--tattva-cat-size);
+  background: var(--tattva-cat-night);
+  box-shadow: inset 0 0.05em 0.1em rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  vertical-align: middle;
+  transition: background-color var(--tattva-cat-speed) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-cat[data-state="on"] {
+  background: var(--tattva-cat-day);
+}
+
+.tattva-cat:focus-visible {
+  outline: 0.06em solid #3b82f6;
+  outline-offset: 0.08em;
+}
+
+.tattva-cat:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* a little sun on the far side, rising as the cat wakes */
+.tattva-cat__sun {
+  position: absolute;
+  top: 50%;
+  left: 0.32em;
+  width: 0.32em;
+  height: 0.32em;
+  margin-top: -0.16em;
+  border-radius: 50%;
+  background: #fff3c4;
+  box-shadow:
+    0 0 0 0.07em rgba(255, 255, 255, 0.35),
+    0 0 0 0.14em rgba(255, 255, 255, 0.18);
+  opacity: 0;
+  transform: translateY(0.3em) scale(0.6);
+  transition:
+    opacity var(--tattva-cat-speed) ease,
+    transform var(--tattva-cat-speed) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tattva-cat[data-state="on"] .tattva-cat__sun {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Z's drifting up while it sleeps ---------- */
+.tattva-cat__zzz {
+  position: absolute;
+  top: 0.26em;
+  left: 1em;
+  width: 0.8em;
+  height: 0.5em;
+  pointer-events: none;
+}
+
+.tattva-cat__zzz i {
+  position: absolute;
+  bottom: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font: 700 0.24em/1 ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-style: normal;
+  opacity: 0;
+}
+
+.tattva-cat[data-state="off"] .tattva-cat__zzz i {
+  animation: tattva-cat-z 2.4s ease-out infinite;
+}
+
+.tattva-cat[data-state="off"] .tattva-cat__zzz i:nth-child(2) {
+  animation-delay: 0.8s;
+  font-size: 0.3em;
+}
+
+.tattva-cat[data-state="off"] .tattva-cat__zzz i:nth-child(3) {
+  animation-delay: 1.6s;
+  font-size: 0.36em;
+}
+
+@keyframes tattva-cat-z {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0.4em) rotate(-10deg);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(1.6em, -1.4em) rotate(12deg);
+  }
+}
+
+/* ---------- Head: the knob ---------- */
+.tattva-cat__head {
+  position: absolute;
+  top: 0.1em;
+  left: 0.1em;
+  width: 0.8em;
+  height: 0.8em;
+  transition: transform var(--tattva-cat-speed) cubic-bezier(0.5, -0.25, 0.3, 1.35);
+}
+
+.tattva-cat[data-state="on"] .tattva-cat__head {
+  transform: translateX(1.3em);
+}
+
+.tattva-cat__face {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 30%, color-mix(in srgb, var(--tattva-cat-fur) 55%, #fff), var(--tattva-cat-fur) 55%, color-mix(in srgb, var(--tattva-cat-fur) 80%, #6b2c00));
+  box-shadow: 0 0.04em 0.1em rgba(0, 0, 0, 0.28);
+}
+
+/* ears sit behind the face; they droop asleep and stand up awake */
+.tattva-cat__ear {
+  position: absolute;
+  top: -0.06em;
+  width: 0.28em;
+  height: 0.3em;
+  background: color-mix(in srgb, var(--tattva-cat-fur) 85%, #6b2c00);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  transition: transform var(--tattva-cat-speed) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tattva-cat__ear::after {
+  content: "";
+  position: absolute;
+  inset: 32% 26% 0;
+  background: #ffb3c1;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.tattva-cat__ear--left {
+  left: 0.04em;
+  transform: rotate(-38deg) translate(-0.03em, 0.06em);
+  transform-origin: 50% 100%;
+}
+
+.tattva-cat__ear--right {
+  right: 0.04em;
+  transform: rotate(38deg) translate(0.03em, 0.06em);
+  transform-origin: 50% 100%;
+}
+
+.tattva-cat[data-state="on"] .tattva-cat__ear--left {
+  transform: rotate(-12deg);
+}
+
+.tattva-cat[data-state="on"] .tattva-cat__ear--right {
+  transform: rotate(12deg);
+}
+
+/* forehead stripes */
+.tattva-cat__stripes {
+  position: absolute;
+  top: 0.06em;
+  left: 50%;
+  width: 0.03em;
+  height: 0.12em;
+  margin-left: -0.015em;
+  border-radius: 0.02em;
+  background: color-mix(in srgb, var(--tattva-cat-fur) 60%, #6b2c00);
+  box-shadow:
+    -0.07em 0.01em 0 color-mix(in srgb, var(--tattva-cat-fur) 60%, #6b2c00),
+    0.07em 0.01em 0 color-mix(in srgb, var(--tattva-cat-fur) 60%, #6b2c00);
+}
+
+/* eyes: sleepy arcs, then open with a slit pupil */
+.tattva-cat__eye {
+  position: absolute;
+  top: 0.3em;
+  width: 0.17em;
+  height: 0.17em;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 30%, #fff 0 12%, transparent 13%),
+    radial-gradient(ellipse 22% 44% at 50% 50%, var(--tattva-cat-ink) 0 98%, transparent 100%),
+    radial-gradient(circle, #d6ef5a, #93c93a);
+  transform: scaleY(1);
+  transition:
+    transform 0.25s ease calc(var(--tattva-cat-speed) * 0.6),
+    background-color 0.2s ease;
+}
+
+.tattva-cat__eye--left {
+  left: 0.16em;
+}
+
+.tattva-cat__eye--right {
+  right: 0.16em;
+}
+
+/* asleep: the eye is drawn as a closed lid instead */
+.tattva-cat[data-state="off"] .tattva-cat__eye {
+  height: 0.09em;
+  margin-top: 0.06em;
+  border: 0.028em solid var(--tattva-cat-ink);
+  border-top-color: transparent;
+  border-radius: 0 0 0.1em 0.1em;
+  background: none;
+  transition: none;
+}
+
+.tattva-cat[data-touched][data-state="on"] .tattva-cat__eye {
+  animation: tattva-cat-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--tattva-cat-speed) * 0.55) both;
+}
+
+@keyframes tattva-cat-pop {
+  from {
+    transform: scaleY(0.1);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.tattva-cat__cheek {
+  position: absolute;
+  top: 0.5em;
+  width: 0.12em;
+  height: 0.07em;
+  border-radius: 50%;
+  background: rgba(255, 120, 140, 0.5);
+}
+
+.tattva-cat__cheek--left {
+  left: 0.1em;
+}
+
+.tattva-cat__cheek--right {
+  right: 0.1em;
+}
+
+/* nose, with the little "w" of a mouth under it */
+.tattva-cat__nose {
+  position: absolute;
+  top: 0.48em;
+  left: 50%;
+  width: 0.08em;
+  height: 0.055em;
+  margin-left: -0.04em;
+  border-radius: 50% 50% 60% 60% / 40% 40% 80% 80%;
+  background: #e8607a;
+}
+
+.tattva-cat__nose::before,
+.tattva-cat__nose::after {
+  content: "";
+  position: absolute;
+  top: 0.05em;
+  width: 0.06em;
+  height: 0.045em;
+  box-sizing: border-box;
+  border: 0.018em solid var(--tattva-cat-ink);
+  border-top: 0;
+  border-radius: 0 0 0.04em 0.04em;
+}
+
+.tattva-cat__nose::before {
+  right: 50%;
+}
+
+.tattva-cat__nose::after {
+  left: 50%;
+}
+
+.tattva-cat__whiskers {
+  position: absolute;
+  top: 0.53em;
+  width: 0.2em;
+  height: 0.012em;
+  border-radius: 0.01em;
+  background: rgba(58, 36, 20, 0.6);
+  box-shadow:
+    0 0.05em 0 rgba(58, 36, 20, 0.6),
+    0 -0.05em 0 rgba(58, 36, 20, 0.6);
+}
+
+.tattva-cat__whiskers--left {
+  left: -0.06em;
+  transform: rotate(6deg);
+  transform-origin: 100% 50%;
+}
+
+.tattva-cat__whiskers--right {
+  right: -0.06em;
+  transform: rotate(-6deg);
+  transform-origin: 0 50%;
+}
+
+.tattva-cat[data-touched][data-state="on"] .tattva-cat__whiskers--left {
+  animation: tattva-cat-twitch-left 0.5s ease-in-out var(--tattva-cat-speed) 2;
+}
+
+.tattva-cat[data-touched][data-state="on"] .tattva-cat__whiskers--right {
+  animation: tattva-cat-twitch-right 0.5s ease-in-out var(--tattva-cat-speed) 2;
+}
+
+@keyframes tattva-cat-twitch-left {
+  50% {
+    transform: rotate(-4deg);
+  }
+}
+
+@keyframes tattva-cat-twitch-right {
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-cat,
+  .tattva-cat * {
+    transition-duration: 0.01s !important;
+    transition-delay: 0s !important;
+    animation: none !important;
+  }
+}

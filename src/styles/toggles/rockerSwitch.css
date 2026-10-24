@@ -1,0 +1,165 @@
+/*
+  Tattva RockerSwitch
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-rocker-size     height of the housing; everything is measured in em from it
+    --tattva-rocker-led      colour of the lit LED
+    --tattva-rocker-paddle   colour of the paddle
+    --tattva-rocker-housing  colour of the housing
+    --tattva-rocker-speed    how quickly it tips over
+*/
+
+/* ---------- Customizable defaults (zero specificity) ---------- */
+:where(.tattva-rocker) {
+  --tattva-rocker-size: 56px;
+  --tattva-rocker-led: #36f08a;
+  --tattva-rocker-paddle: #2b2b33;
+  --tattva-rocker-housing: #121216;
+  --tattva-rocker-speed: 0.22s;
+}
+
+.tattva-rocker {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.14em;
+  flex: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--tattva-rocker-size);
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-rocker:focus-visible {
+  outline: 0.04em solid #3b82f6;
+  outline-offset: 0.08em;
+  border-radius: 0.2em;
+}
+
+.tattva-rocker:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- LED ---------- */
+.tattva-rocker__led {
+  width: 0.12em;
+  height: 0.12em;
+  border-radius: 50%;
+  background: #3a2b2b;
+  box-shadow: inset 0 0.015em 0.03em rgba(0, 0, 0, 0.6);
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.tattva-rocker[data-state="on"] .tattva-rocker__led {
+  background: var(--tattva-rocker-led);
+  box-shadow:
+    0 0 0.06em var(--tattva-rocker-led),
+    0 0 0.22em color-mix(in srgb, var(--tattva-rocker-led) 70%, transparent),
+    inset 0 -0.02em 0.03em rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Housing: the hole the paddle sits in ---------- */
+.tattva-rocker__housing {
+  display: block;
+  box-sizing: border-box;
+  width: 1.5em;
+  height: 1em;
+  padding: 0.09em;
+  border-radius: 0.2em;
+  background: var(--tattva-rocker-housing);
+  box-shadow:
+    inset 0 0.04em 0.1em rgba(0, 0, 0, 0.8),
+    0 0 0 0.014em rgba(255, 255, 255, 0.1),
+    0 0.02em 0 rgba(255, 255, 255, 0.12),
+    0 0.08em 0.2em rgba(0, 0, 0, 0.35);
+  perspective: 2.4em;
+}
+
+/* ---------- Paddle: tips over around its middle ---------- */
+.tattva-rocker__paddle {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.13em;
+  overflow: hidden;
+  background: var(--tattva-rocker-paddle);
+  box-shadow:
+    inset 0 0.025em 0 rgba(255, 255, 255, 0.14),
+    0 0.03em 0.05em rgba(0, 0, 0, 0.5);
+  transform: rotateY(-17deg);
+  transform-style: preserve-3d;
+  transition: transform var(--tattva-rocker-speed) cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.tattva-rocker[data-state="on"] .tattva-rocker__paddle {
+  transform: rotateY(17deg);
+}
+
+.tattva-rocker:active:not(:disabled) .tattva-rocker__paddle {
+  filter: brightness(0.92);
+}
+
+.tattva-rocker__half {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  transition: background-color var(--tattva-rocker-speed) ease;
+}
+
+/* the pressed half sinks into shadow, the raised half catches the light */
+.tattva-rocker__half--off {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.12));
+}
+
+.tattva-rocker__half--on {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+}
+
+.tattva-rocker[data-state="on"] .tattva-rocker__half--off {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.1));
+}
+
+.tattva-rocker[data-state="on"] .tattva-rocker__half--on {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.42));
+}
+
+.tattva-rocker__half + .tattva-rocker__half {
+  box-shadow: inset 0.012em 0 0 rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Marks ---------- */
+.tattva-rocker__o {
+  width: 0.2em;
+  height: 0.2em;
+  box-sizing: border-box;
+  border: 0.035em solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+}
+
+.tattva-rocker__i {
+  width: 0.035em;
+  height: 0.24em;
+  border-radius: 0.02em;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.tattva-rocker[data-state="on"] .tattva-rocker__i {
+  background: var(--tattva-rocker-led);
+  box-shadow: 0 0 0.06em color-mix(in srgb, var(--tattva-rocker-led) 80%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-rocker,
+  .tattva-rocker * {
+    transition-duration: 0.01s !important;
+  }
+}

@@ -1,0 +1,185 @@
+/*
+  Tattva FireflyJar
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-firefly-size   height of the jar; everything is measured in em from it
+    --tattva-firefly-glow   colour of the fireflies' light
+*/
+
+:where(.tattva-firefly) {
+  --tattva-firefly-size: 120px;
+  --tattva-firefly-glow: #e9ff70;
+}
+
+.tattva-firefly {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 0.78em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--tattva-firefly-size);
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-firefly:focus-visible {
+  outline: 0.02em solid #3b82f6;
+  outline-offset: 0.04em;
+  border-radius: 0.08em;
+}
+
+.tattva-firefly:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* the light the jar throws around it */
+.tattva-firefly__aura {
+  position: absolute;
+  inset: -0.1em -0.2em;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--tattva-firefly-glow) 32%, transparent), transparent);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  pointer-events: none;
+}
+
+.tattva-firefly[data-state="on"] .tattva-firefly__aura {
+  opacity: 1;
+  animation: tattva-firefly-breathe 3.2s ease-in-out 1.2s infinite;
+}
+
+/* ---------- Lid ---------- */
+.tattva-firefly__lid {
+  position: absolute;
+  top: 0;
+  left: 0.14em;
+  z-index: 2;
+  width: 0.5em;
+  height: 0.11em;
+  border-radius: 0.025em;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.18) 0 0.012em, transparent 0.012em 0.045em),
+    linear-gradient(180deg, #c3c8cf, #7c838d 70%, #5d636b);
+  box-shadow: 0 0.012em 0.02em rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Jar ---------- */
+.tattva-firefly__jar {
+  position: absolute;
+  top: 0.1em;
+  left: 0.04em;
+  width: 0.7em;
+  height: 0.88em;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 0.012em solid rgba(255, 255, 255, 0.5);
+  border-radius: 0.12em 0.12em 0.17em 0.17em;
+  background: linear-gradient(180deg, rgba(210, 232, 255, 0.16), rgba(160, 200, 240, 0.08));
+  box-shadow:
+    inset 0 -0.03em 0.06em rgba(255, 255, 255, 0.2),
+    inset 0 0.02em 0.04em rgba(0, 0, 0, 0.12),
+    0 0.03em 0.08em rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(1px);
+}
+
+/* the warm light the fireflies fill the glass with */
+.tattva-firefly__light {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--tattva-firefly-glow) 38%, transparent), transparent 75%);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.tattva-firefly[data-state="on"] .tattva-firefly__light {
+  opacity: 1;
+}
+
+/* glass reflections */
+.tattva-firefly__shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 10%, rgba(255, 255, 255, 0.45) 13%, rgba(255, 255, 255, 0.1) 19%, transparent 22%),
+    linear-gradient(90deg, transparent 78%, rgba(255, 255, 255, 0.18) 82%, transparent 85%);
+}
+
+/* ---------- Fireflies ---------- */
+.tattva-firefly__fly {
+  position: absolute;
+  left: var(--rest);
+  top: 92%;
+  width: 0.04em;
+  height: 0.03em;
+  margin: -0.015em 0 0 -0.02em;
+  border-radius: 50%;
+  background: #4d5132;
+  box-shadow: 0 0 0 0.004em rgba(0, 0, 0, 0.3);
+  transition:
+    left 1.4s cubic-bezier(0.45, 0, 0.2, 1) var(--d),
+    top 1.4s cubic-bezier(0.45, 0, 0.2, 1) var(--d),
+    background-color 0.6s ease var(--d),
+    box-shadow 0.6s ease var(--d);
+}
+
+.tattva-firefly[data-state="on"] .tattva-firefly__fly {
+  left: var(--x);
+  top: var(--y);
+  background: #fbffd9;
+  box-shadow:
+    0 0 0.02em 0.01em var(--tattva-firefly-glow),
+    0 0 0.07em 0.03em color-mix(in srgb, var(--tattva-firefly-glow) 70%, transparent),
+    0 0 0.16em 0.05em color-mix(in srgb, var(--tattva-firefly-glow) 30%, transparent);
+  animation:
+    tattva-firefly-drift var(--t) ease-in-out calc(1.4s + var(--d)) infinite,
+    tattva-firefly-pulse calc(var(--t) * 0.7) ease-in-out calc(1.4s + var(--d)) infinite;
+}
+
+@keyframes tattva-firefly-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(var(--ax), var(--ay));
+  }
+  66% {
+    transform: translate(var(--bx), var(--by));
+  }
+}
+
+@keyframes tattva-firefly-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes tattva-firefly-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-firefly,
+  .tattva-firefly * {
+    transition-duration: 0.01s !important;
+    transition-delay: 0s !important;
+    animation: none !important;
+  }
+}

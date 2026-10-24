@@ -1,0 +1,265 @@
+/*
+  Tattva RocketToggle
+
+  Customizable CSS variables (set through props, or your own CSS / style):
+    --tattva-rocket-size     size of the tile; everything is measured in em from it
+    --tattva-rocket-accent   nose cone and fins
+    --tattva-rocket-sky      the sky behind it
+*/
+
+:where(.tattva-rocket) {
+  --tattva-rocket-size: 96px;
+  --tattva-rocket-accent: #ff5a5f;
+  --tattva-rocket-sky: #1c2250;
+}
+
+/* the tile is the sky */
+.tattva-rocket {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.22em;
+  font-size: var(--tattva-rocket-size);
+  background:
+    radial-gradient(ellipse at 50% 120%, color-mix(in srgb, var(--tattva-rocket-sky) 40%, #ff9a5a) 0%, transparent 55%),
+    linear-gradient(180deg, color-mix(in srgb, var(--tattva-rocket-sky) 70%, #000), var(--tattva-rocket-sky));
+  box-shadow:
+    inset 0 0.01em 0 rgba(255, 255, 255, 0.15),
+    0 0.03em 0.08em rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tattva-rocket:focus-visible {
+  outline: 0.025em solid #3b82f6;
+  outline-offset: 0.03em;
+}
+
+.tattva-rocket:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tattva-rocket > span {
+  position: absolute;
+}
+
+/* ---------- Stars: still, then streaking past in flight ---------- */
+.tattva-rocket__stars {
+  inset: 0;
+}
+
+.tattva-rocket__stars i {
+  position: absolute;
+  top: calc(5% + var(--i) * 9%);
+  width: 0.015em;
+  height: 0.015em;
+  border-radius: 0.01em;
+  background: rgba(255, 255, 255, 0.85);
+  transition: height 0.6s ease;
+}
+
+.tattva-rocket__stars i:nth-child(1) { left: 12%; }
+.tattva-rocket__stars i:nth-child(2) { left: 78%; }
+.tattva-rocket__stars i:nth-child(3) { left: 30%; }
+.tattva-rocket__stars i:nth-child(4) { left: 88%; }
+.tattva-rocket__stars i:nth-child(5) { left: 18%; }
+.tattva-rocket__stars i:nth-child(6) { left: 64%; }
+.tattva-rocket__stars i:nth-child(7) { left: 84%; }
+.tattva-rocket__stars i:nth-child(8) { left: 8%; }
+
+.tattva-rocket[data-state="on"] .tattva-rocket__stars i {
+  height: 0.09em;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+  animation: tattva-rocket-streak 0.7s linear calc(0.5s + var(--i) * -0.09s) infinite;
+}
+
+@keyframes tattva-rocket-streak {
+  from {
+    transform: translateY(-1.1em);
+  }
+  to {
+    transform: translateY(1.1em);
+  }
+}
+
+/* ---------- Launch pad ---------- */
+.tattva-rocket__pad {
+  bottom: 0;
+  left: 0;
+  width: 1em;
+  height: 0.12em;
+  background: linear-gradient(180deg, #5a5f6e, #3a3e4a);
+  box-shadow: inset 0 0.01em 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.9s cubic-bezier(0.6, 0, 0.3, 1);
+}
+
+.tattva-rocket[data-state="on"] .tattva-rocket__pad {
+  transform: translateY(0.14em);
+}
+
+/* ---------- Rocket ---------- */
+.tattva-rocket__ship {
+  left: 50%;
+  bottom: 0.12em;
+  width: 0.24em;
+  height: 0.5em;
+  margin-left: -0.12em;
+  transition: transform 1s cubic-bezier(0.55, 0, 0.25, 1);
+}
+
+.tattva-rocket[data-state="on"] .tattva-rocket__ship {
+  transform: translateY(-0.2em);
+  animation: tattva-rocket-hover 1.6s ease-in-out 1s infinite;
+}
+
+.tattva-rocket[data-touched][data-state="on"] .tattva-rocket__body {
+  animation: tattva-rocket-shudder 0.08s linear 6;
+}
+
+@keyframes tattva-rocket-hover {
+  0%,
+  100% {
+    transform: translateY(-0.2em);
+  }
+  50% {
+    transform: translateY(-0.24em);
+  }
+}
+
+@keyframes tattva-rocket-shudder {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(0.006em);
+  }
+}
+
+.tattva-rocket__body {
+  position: absolute;
+  inset: 0 0.025em 0.05em;
+  border-radius: 50% 50% 0.04em 0.04em / 62% 62% 0.04em 0.04em;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(255, 255, 255, 0.4) 40%, rgba(0, 0, 0, 0.16)),
+    linear-gradient(180deg, var(--tattva-rocket-accent) 0 26%, #f2f4f8 26%);
+  box-shadow: 0 0.01em 0.02em rgba(0, 0, 0, 0.35);
+}
+
+.tattva-rocket__window {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  width: 0.08em;
+  height: 0.08em;
+  margin-left: -0.04em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c8f1ff, #3fa2ff 60%, #1b5fb5);
+  box-shadow: 0 0 0 0.014em #8a93a3;
+}
+
+.tattva-rocket__fin {
+  position: absolute;
+  bottom: 0.04em;
+  width: 0.1em;
+  height: 0.16em;
+  background: color-mix(in srgb, var(--tattva-rocket-accent) 85%, #000);
+}
+
+.tattva-rocket__fin--left {
+  left: -0.035em;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 60%);
+}
+
+.tattva-rocket__fin--right {
+  right: -0.035em;
+  clip-path: polygon(0 0, 100% 60%, 100% 100%, 0 100%);
+}
+
+/* ---------- Flame ---------- */
+.tattva-rocket__flame {
+  position: absolute;
+  top: calc(100% - 0.06em);
+  left: 50%;
+  width: 0.1em;
+  height: 0.2em;
+  margin-left: -0.05em;
+  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+  background: radial-gradient(ellipse at 50% 20%, #fffbe0 0%, #ffd34d 30%, #ff7a2f 65%, rgba(255, 60, 30, 0) 100%);
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+  opacity: 0;
+  transition:
+    transform 0.25s ease,
+    opacity 0.2s ease;
+}
+
+.tattva-rocket[data-state="on"] .tattva-rocket__flame {
+  transform: scaleY(1);
+  opacity: 1;
+  animation: tattva-rocket-flame 0.12s ease-in-out 0.25s infinite alternate;
+}
+
+@keyframes tattva-rocket-flame {
+  from {
+    transform: scale(0.9, 0.85);
+  }
+  to {
+    transform: scale(1.05, 1.15);
+  }
+}
+
+/* ---------- Smoke at lift-off ---------- */
+.tattva-rocket__smoke {
+  left: 50%;
+  bottom: 0.1em;
+  width: 0;
+  height: 0;
+}
+
+.tattva-rocket__smoke i {
+  position: absolute;
+  left: -0.07em;
+  bottom: -0.07em;
+  width: 0.14em;
+  height: 0.14em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #f4f1ee, #b9b3ad 70%);
+  opacity: 0;
+}
+
+.tattva-rocket[data-touched][data-state="on"] .tattva-rocket__smoke i {
+  animation: tattva-rocket-puff 1.2s ease-out forwards;
+}
+
+.tattva-rocket[data-touched][data-state="on"] .tattva-rocket__smoke i:nth-child(1) { --dx: -0.32em; }
+.tattva-rocket[data-touched][data-state="on"] .tattva-rocket__smoke i:nth-child(2) { --dx: 0.32em; animation-delay: 0.05s; }
+.tattva-rocket[data-touched][data-state="on"] .tattva-rocket__smoke i:nth-child(3) { --dx: -0.18em; animation-delay: 0.15s; }
+.tattva-rocket[data-touched][data-state="on"] .tattva-rocket__smoke i:nth-child(4) { --dx: 0.2em; animation-delay: 0.2s; }
+
+@keyframes tattva-rocket-puff {
+  0% {
+    opacity: 0.95;
+    transform: translate(0, 0) scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), -0.06em) scale(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tattva-rocket,
+  .tattva-rocket * {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}

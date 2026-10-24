@@ -33,3 +33,19 @@ export { default as CircleExpand } from "./components/cards/CircleExpand.jsx";
 export { default as SideRevealCard } from "./components/cards/SideRevealCard.jsx";
 export { default as PixelHover } from "./components/cards/PixelHover.jsx";
 export { default as FolderCard } from "./components/cards/FolderCard.jsx";
+
+//toggle imports
+export { default as DayNightToggle } from "./components/toggles/DayNightToggle.jsx";
+export { default as MoodToggle } from "./components/toggles/MoodToggle.jsx";
+export { default as RockerSwitch } from "./components/toggles/RockerSwitch.jsx";
+export { default as CandleToggle } from "./components/toggles/CandleToggle.jsx";
+export { default as FireflyJar } from "./components/toggles/FireflyJar.jsx";
+export { default as RecordPlayer } from "./components/toggles/RecordPlayer.jsx";
+export { default as RocketToggle } from "./components/toggles/RocketToggle.jsx";
+export { default as SleepyCat } from "./components/toggles/SleepyCat.jsx";
+export { default as PadlockToggle } from "./components/toggles/PadlockToggle.jsx";
+export { default as EyeToggle } from "./components/toggles/EyeToggle.jsx";
+export { default as NeonSign } from "./components/toggles/NeonSign.jsx";
+export { default as LavaLamp } from "./components/toggles/LavaLamp.jsx";
+export { default as BellToggle } from "./components/toggles/BellToggle.jsx";
+export { default as FlowerBloom } from "./components/toggles/FlowerBloom.jsx";
