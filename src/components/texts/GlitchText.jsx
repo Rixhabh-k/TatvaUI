@@ -1,5 +1,9 @@
 import "../../styles/texts/glitchText.css";
+
 /**
+ * GlitchText — text that tears into offset RGB slices.
+ * Pure CSS animation, driven by a `data-text` copy of the text.
+ *
  * @param {string}  text      Text to glitch.
  * @param {"loop"|"hover"|"always"} trigger
  *        loop   – short glitch bursts with quiet gaps in between (default)
@@ -8,6 +12,7 @@ import "../../styles/texts/glitchText.css";
  * @param {number}  interval  Seconds per burst cycle (loop) / per flicker cycle (hover, always).
  * @param {number}  shift     How far the slices jump, in em.
  * @param {[string, string]} colors  The two slice colours.
+ * @param {string}  baseColor  Colour of the text itself. Default: inherited text colour.
  */
 function GlitchText({
   text = "Glitch",
@@ -15,6 +20,7 @@ function GlitchText({
   interval,
   shift = 0.06,
   colors = ["#00e5ff", "#ff2e93"],
+  baseColor,
   className = "",
   style,
   ...props
@@ -35,6 +41,7 @@ function GlitchText({
         "--tatva-glitch-shift": `${shift}em`,
         "--tatva-glitch-a": colors[0],
         "--tatva-glitch-b": colors[1],
+        color: baseColor,
         ...style,
       }}>
       <span className="tatva-glitch__text">{text}</span>
