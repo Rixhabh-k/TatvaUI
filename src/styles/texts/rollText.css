@@ -1,0 +1,91 @@
+.tatva-roll {
+    --tatva-roll-duration: 0.55s;
+    --tatva-roll-stagger: 0.03s;
+    --tatva-roll-ease: cubic-bezier(0.76, 0, 0.24, 1);
+    --tatva-roll-next: currentColor;
+    --tatva-roll-line: 1.2;
+
+    position: relative;
+    display: inline-block;
+    line-height: var(--tatva-roll-line);
+    white-space: pre;
+}
+
+.tatva-roll__visual {
+    display: inline-block;
+}
+
+/* Each letter is a window one line tall… */
+.tatva-roll__char {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    height: 1em;
+    height: calc(1em * var(--tatva-roll-line));
+}
+
+/* …holding two copies stacked: the current letter and the next one. */
+.tatva-roll__face {
+    display: block;
+    will-change: transform;
+}
+
+.tatva-roll__face--next {
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+
+/* Roll! (hover on the text itself, on a .tatva-roll-group parent, or while looping) */
+.tatva-roll:hover .tatva-roll__face,
+.tatva-roll-group:hover .tatva-roll__face,
+.tatva-roll--rolling .tatva-roll__face {
+    animation: tatva-roll var(--tatva-roll-duration) var(--tatva-roll-ease) calc(var(--i, 0) * var(--tatva-roll-stagger)) both;
+}
+
+/* The incoming letter flashes --tatva-roll-next and settles into the text
+   colour as it lands, so nothing pops when the roll resets. */
+.tatva-roll:hover .tatva-roll__face--next,
+.tatva-roll-group:hover .tatva-roll__face--next,
+.tatva-roll--rolling .tatva-roll__face--next {
+    animation-name: tatva-roll-next;
+}
+
+@keyframes tatva-roll {
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes tatva-roll-next {
+    from {
+        color: var(--tatva-roll-next);
+    }
+
+    to {
+        transform: translateY(-100%);
+        color: currentColor;
+    }
+}
+
+.tatva-roll__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .tatva-roll:hover .tatva-roll__face,
+    .tatva-roll-group:hover .tatva-roll__face,
+    .tatva-roll--rolling .tatva-roll__face {
+        animation: none;
+    }
+}
