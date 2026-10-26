@@ -24,6 +24,7 @@ export { default as ScatterText } from "./components/texts/ScatterText.jsx"
 export { default as GlitchText } from "./components/texts/GlitchText.jsx"
 export { default as CircularText } from "./components/texts/CircularText.jsx"
 export { default as RollText } from "./components/texts/RollText.jsx"
+export { default as ShimmerText } from "./components/texts/ShimmerText.jsx"
 
 //cards animations imports
 export { default as ThreeDCard } from "./components/cards/ThreeDCard.jsx"
