@@ -1,0 +1,94 @@
+.tatva-dot-matrix {
+    --tatva-dm-idle: rgba(255, 255, 255, 0.32);
+    --tatva-dm-idle-scale: 0.16;
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 18px;
+    color: #fff;
+    font-family: inherit;
+}
+
+.tatva-dot-matrix__label {
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.tatva-dot-matrix__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--tatva-dm-cols), var(--tatva-dm-cell));
+    grid-auto-rows: var(--tatva-dm-cell);
+}
+
+.tatva-dot-matrix__dot {
+    display: grid;
+    place-items: center;
+}
+
+.tatva-dot-matrix__dot::after {
+    content: "";
+    width: calc(var(--tatva-dm-cell) * 0.72);
+    height: calc(var(--tatva-dm-cell) * 0.72);
+    border-radius: 50%;
+    background: var(--tatva-dm-idle);
+    transform: scale(var(--tatva-dm-idle-scale));
+}
+
+.tatva-dot-matrix__dot--lit::after {
+    background: color-mix(in srgb, var(--tatva-dm-outer) calc(var(--t) * 100%), var(--tatva-dm-inner));
+    opacity: 0.4;
+    animation: tatva-dm-burst var(--tatva-dm-dur) cubic-bezier(0.45, 0, 0.25, 1) infinite;
+    animation-delay: var(--delay);
+}
+
+/* centre lights first and fades first, so the burst grows outward,
+   then hollows into a ring that travels to the edge and dissolves */
+@keyframes tatva-dm-burst {
+    0% {
+        transform: scale(var(--tatva-dm-idle-scale));
+        opacity: 0.4;
+    }
+
+    22% {
+        transform: scale(var(--peak));
+        opacity: 1;
+    }
+
+    48% {
+        transform: scale(var(--peak));
+        opacity: 1;
+    }
+
+    68% {
+        transform: scale(var(--tatva-dm-idle-scale));
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: scale(var(--tatva-dm-idle-scale));
+        opacity: 0.4;
+    }
+}
+
+.tatva-dot-matrix__badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #7fe9ff;
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tatva-dot-matrix__dot--lit::after {
+        animation: none;
+        transform: scale(var(--peak));
+        opacity: 1;
+    }
+}
