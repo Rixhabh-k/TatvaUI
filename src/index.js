@@ -26,11 +26,13 @@ export { default as MagicText } from "./components/texts/MagicText.jsx";
 export { default as ScatterText } from "./components/texts/ScatterText.jsx"
 export { default as GlitchText } from "./components/texts/GlitchText.jsx"
 export { default as CircularText } from "./components/texts/CircularText.jsx"
+export { default as RollText } from "./components/texts/RollText.jsx"
+export { default as ShimmerText } from "./components/texts/Shimmer  Text.jsx"
 
 //cards animations imports
 export { default as ThreeDCard } from "./components/cards/ThreeDCard.jsx"
 export { default as GliterCard } from "./components/cards/GlitterCard.jsx"
-export { default as PixelCard } from "./components/cards/PixelCard.jsx"
+export { default as PixelCard } from "./components/cards/DotMatrixLoader.jsx"
 export { default as AnimatedBorderCard } from "./components/cards/AnimatedBorderCard.jsx"
 export { default as ShowCard } from "./components/cards/ShowCard.jsx"
 export { default as NeoBrutalism } from "./components/cards/NeoBrutalism.jsx"

@@ -1,0 +1,59 @@
+.tatva-shimmer {
+    --tatva-shimmer-duration: 2.2s;
+    --tatva-shimmer-delay: 0s;
+    --tatva-shimmer-angle: 100deg;
+    --tatva-shimmer-band: 18%;
+    /* half-width of the light band */
+}
+
+/* Only apply the effect where gradient text + color-mix are supported;
+   everywhere else the text simply stays plain and readable. */
+@supports (color: color-mix(in srgb, red, blue)) and ((-webkit-background-clip: text) or (background-clip: text)) {
+    .tatva-shimmer {
+        --tatva-shimmer-base: color-mix(in srgb, currentColor 40%, transparent);
+        --tatva-shimmer-highlight: currentColor;
+
+        background-image: linear-gradient(var(--tatva-shimmer-angle),
+                var(--tatva-shimmer-base) 0%,
+                var(--tatva-shimmer-base) calc(50% - var(--tatva-shimmer-band)),
+                var(--tatva-shimmer-highlight) 50%,
+                var(--tatva-shimmer-base) calc(50% + var(--tatva-shimmer-band)),
+                var(--tatva-shimmer-base) 100%);
+        background-size: 250% 100%;
+        background-position: 100% 0;
+        background-repeat: no-repeat;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+
+        animation: tatva-shimmer var(--tatva-shimmer-duration) linear var(--tatva-shimmer-delay) infinite;
+    }
+}
+
+.tatva-shimmer--rtl {
+    animation-direction: reverse;
+}
+
+.tatva-shimmer--paused {
+    animation-play-state: paused;
+}
+
+@keyframes tatva-shimmer {
+    from {
+        background-position: 100% 0;
+    }
+
+    to {
+        background-position: 0 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tatva-shimmer {
+        animation: none;
+        background: none;
+        -webkit-text-fill-color: currentColor;
+    }
+}
